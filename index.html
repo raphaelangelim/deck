@@ -20,6 +20,7 @@
             gap: 20px;
             padding: 20px;
             background-color: #fafafa;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
         }
 
         .image-container {
@@ -183,6 +184,32 @@
             font-size: 16px;
             background: #007AFF;
             color: white;
+        }
+
+        /* Mobile View */
+        @media (max-width: 768px) {
+            .image-container, .dialogue-container {
+                width: 100%;
+                margin-right: 0;
+            }
+
+            .flashcard-container {
+                gap: 0; /* Remove gap between cards */
+            }
+
+            .polaroid {
+                width: 33.33%; /* 3 cards per row */
+                box-shadow: none; /* Remove shadow for a cleaner look */
+                border-radius: 0; /* Remove border radius for a seamless grid */
+            }
+
+            .polaroid img {
+                border-radius: 0; /* Remove border radius for images */
+            }
+
+            .word {
+                font-size: 18px; /* Adjust font size for smaller screens */
+            }
         }
     </style>
 </head>
