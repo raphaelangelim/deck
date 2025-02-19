@@ -271,6 +271,7 @@
     </div>
 
     <!-- JavaScript -->
+    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
     <script>
         // Dialogue Section
         const dialogue = [
@@ -343,7 +344,8 @@
             if (i < dialogue.length && !isPaused) {
                 let msg = new SpeechSynthesisUtterance(dialogue[i].text);
                 msg.lang = "fr-FR";
-                msg.rate = 0.85;
+                msg.rate = 0.7; // Adjust the rate to make the speech sound less nasal
+                msg.pitch = 1.2; // Adjust the pitch to make the speech sound more natural
 
                 // Set the voice explicitly
                 const frenchVoice = getFrenchVoice();
@@ -519,17 +521,7 @@
 
         // Play audio for a given word
         function playAudio(word) {
-            let msg = new SpeechSynthesisUtterance(word);
-            msg.lang = "fr-FR";
-            msg.rate = 0.85;
-
-            // Set the voice explicitly
-            const frenchVoice = getFrenchVoice();
-            if (frenchVoice) {
-                msg.voice = frenchVoice;
-            }
-
-            window.speechSynthesis.speak(msg);
+            responsiveVoice.speak(word, "French Female", {rate: 0.7, pitch: 1.2});
         }
 
         // Load the dialogue and flashcards when the page loads
