@@ -129,12 +129,12 @@
             display: none;
             position: relative;
             width: 300px;
-            height: auto; /* Adjust height based on content */
+            height: 400px;
             margin: auto;
             overflow: hidden;
             text-align: center;
             background: white;
-            padding: 20px;
+            padding: 15px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
         }
@@ -148,20 +148,20 @@
         .deck-word {
             font-size: 24px;
             font-weight: bold;
-            margin: 15px 0;
+            margin-top: 10px;
         }
 
         .deck-buttons {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         .deck-button {
             background-color: #007AFF;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 15px;
             cursor: pointer;
             border-radius: 5px;
             font-size: 16px;
@@ -210,26 +210,6 @@
             .word {
                 font-size: 18px; /* Adjust font size for smaller screens */
             }
-
-            /* Adjust Deck View for Mobile */
-            .deck-container {
-                width: 90%; /* Make the deck container wider on mobile */
-                height: auto; /* Allow height to adjust based on content */
-                padding: 15px; /* Adjust padding for better spacing */
-            }
-
-            .deck-word {
-                font-size: 20px; /* Adjust font size for smaller screens */
-                margin: 10px 0; /* Adjust margin for better spacing */
-            }
-
-            .deck-buttons {
-                margin-top: 15px; /* Add more space above buttons */
-            }
-
-            .deck-button {
-                padding: 8px 15px; /* Adjust button size for mobile */
-            }
         }
     </style>
 </head>
@@ -271,7 +251,6 @@
     </div>
 
     <!-- JavaScript -->
-    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
     <script>
         // Dialogue Section
         const dialogue = [
@@ -292,22 +271,6 @@
         let synth = window.speechSynthesis;
         let i = 0;
         let isPaused = false;
-
-        // Function to select a French voice
-        function getFrenchVoice() {
-            const voices = window.speechSynthesis.getVoices();
-            // Prefer Google's French voices or system French voices
-            const frenchVoice = voices.find(voice => voice.lang === "fr-FR" && voice.name.includes("Google Français")) ||
-                                voices.find(voice => voice.lang === "fr-FR" && voice.name.includes("French")) ||
-                                voices.find(voice => voice.lang === "fr-FR");
-
-            if (frenchVoice) {
-                return frenchVoice;
-            } else {
-                console.warn("No French voice found. Falling back to default voice.");
-                return voices[0]; // Fallback to the default voice
-            }
-        }
 
         // Load the dialogue into the dialogue box
         function loadDialogue() {
@@ -344,14 +307,13 @@
             if (i < dialogue.length && !isPaused) {
                 let msg = new SpeechSynthesisUtterance(dialogue[i].text);
                 msg.lang = "fr-FR";
-                msg.rate = 0.7; // Adjust the rate to make the speech sound less nasal
-                msg.pitch = 1.2; // Adjust the pitch to make the speech sound more natural
+                msg.rate = 0.85;
 
-                // Set the voice explicitly
-                const frenchVoice = getFrenchVoice();
-                if (frenchVoice) {
-                    msg.voice = frenchVoice;
-                }
+                let voices = synth.getVoices();
+                let claireVoice = voices.find(voice => voice.name.includes("Google Français female")) || voices.find(voice => voice.lang === "fr-FR" && voice.name.includes("Female"));
+                let julienVoice = voices.find(voice => voice.name.includes("Google Français male")) || voices.find(voice => voice.lang === "fr-FR" && voice.name.includes("Male"));
+
+                msg.voice = dialogue[i].speaker === "Paul" ? julienVoice : claireVoice;
 
                 msg.onend = () => {
                     if (!isPaused) {
@@ -521,7 +483,10 @@
 
         // Play audio for a given word
         function playAudio(word) {
-            responsiveVoice.speak(word, "French Female", {rate: 0.7, pitch: 1.2});
+            let msg = new SpeechSynthesisUtterance(word);
+            msg.lang = "fr-FR";
+            msg.rate = 0.85;
+            window.speechSynthesis.speak(msg);
         }
 
         // Load the dialogue and flashcards when the page loads
