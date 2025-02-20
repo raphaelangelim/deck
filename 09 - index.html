@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dialogue et Flashcards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px;
+            background-color: #fafafa;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+
+        .image-container {
+            width: 45%;
+            max-width: 500px;
+            margin-right: 20px;
+        }
+
+        .image-container img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dialogue-container {
+            width: 45%;
+            max-width: 500px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            text-align: left;
+        }
+
+        .dialogue-button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #007AFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .dialogue-button:hover {
+            background-color: #005ecb;
+        }
+
+        .character {
+            font-weight: bold;
+            color: #007AFF;
+        }
+
+        /* Flashcard container styles */
+        .flashcard-container {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .polaroid {
+            position: relative;
+            background: white;
+            padding: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 30%;
+            transition: all 0.3s ease;
+        }
+
+        .polaroid img {
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .word {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .audio-button {
+            margin-top: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #007AFF;
+        }
+
+        /* List View */
+        .list-view .polaroid {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .list-view .polaroid img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .list-view .word {
+            font-size: 20px;
+            flex: 1;
+        }
+
+        /* Deck View (Instagram Style) */
+        .deck-container {
+            display: none;
+            position: relative;
+            width: 300px;
+            height: auto; /* Adjust height based on content */
+            margin: auto;
+            overflow: hidden;
+            text-align: center;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .deck-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .deck-word {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .deck-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .deck-button {
+            background-color: #007AFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        /* Buttons for switching views */
+        .view-buttons {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .view-buttons button {
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            background: #007AFF;
+            color: white;
+        }
+
+        /* Mobile View */
+        @media (max-width: 768px) {
+            .image-container, .dialogue-container {
+                width: 100%;
+                margin-right: 0;
+            }
+
+            .flashcard-container {
+                gap: 0; /* Remove gap between cards */
+            }
+
+            .polaroid {
+                width: 33.33%; /* 3 cards per row */
+                box-shadow: none; /* Remove shadow for a cleaner look */
+                border-radius: 0; /* Remove border radius for a seamless grid */
+            }
+
+            .polaroid img {
+                border-radius: 0; /* Remove border radius for images */
+            }
+
+            .word {
+                font-size: 18px; /* Adjust font size for smaller screens */
+            }
+
+            /* Adjust Deck View for Mobile */
+            .deck-container {
+                width: 90%; /* Make the deck container wider on mobile */
+                height: auto; /* Allow height to adjust based on content */
+                padding: 15px; /* Adjust padding for better spacing */
+            }
+
+            .deck-word {
+                font-size: 20px; /* Adjust font size for smaller screens */
+                margin: 10px 0; /* Adjust margin for better spacing */
+            }
+
+            .deck-buttons {
+                margin-top: 15px; /* Add more space above buttons */
+            }
+
+            .deck-button {
+                padding: 8px 15px; /* Adjust button size for mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Image Section (Breakfast) -->
+    <div class="image-container">
+        <img src="assets/breakfast.webp" alt="Breakfast Image" />
+    </div>
+
+    <!-- Dialogue Section -->
+    <div class="dialogue-container">
+        <h3>Dialogue</h3>
+        <div id="dialogue-box" class="dialogue"></div>
+        <button class="dialogue-button" onclick="playDialogue()">▶ Écouter</button>
+        <button class="dialogue-button" onclick="pauseDialogue()">⏸ Pause</button>
+    </div>
+
+    <!-- View Buttons -->
+    <div class="view-buttons">
+        <button onclick="switchView('grid')">📸 Grid View</button>
+        <button onclick="switchView('list')">📋 List View</button>
+        <button onclick="switchView('deck')">📖 Deck View</button>
+    </div>
+
+    <!-- Flashcards Section -->
+    <div id="flashcards" class="flashcard-container">
+    </div>
+
+    <!-- Deck View (Instagram Style) -->
+    <div id="deck-container" class="deck-container">
+        <img id="deck-image" src="https://via.placeholder.com/150" alt="Deck Image">
+        <div id="deck-word" class="deck-word"></div>
+        <button class="audio-button" onclick="playDeckAudio()">🔊</button>
+        <div class="deck-buttons">
+            <button class="deck-button" onclick="prevCard()">⬅</button>
+            <button class="deck-button" onclick="nextCard()">➡</button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+    <script>
+        // Dialogue Section
+        const dialogue = [
+            { speaker: "Paul", text: "Salut Léa ! Tu as prévu de partir quelque part bientôt ?" },
+            { speaker: "Léa", text: "Oui, je vais à Lyon le week-end prochain ! J'hésite encore entre prendre le train ou la voiture." },
+            { speaker: "Paul", text: "Ah, ça dépend. Si tu veux éviter les embouteillages et arriver rapidement, le train est une bonne option." },
+            { speaker: "Léa", text: "C’est vrai, mais avec la voiture, j’aurais plus de liberté pour me déplacer une fois sur place." },
+            { speaker: "Paul", text: "Tu pourrais aussi louer une voiture directement à Lyon, comme ça, tu voyages en train et tu conduis sur place." },
+            { speaker: "Léa", text: "Pas bête ! Et toi, tu as des voyages prévus ?" },
+            { speaker: "Paul", text: "Oui, je pars en Espagne le mois prochain. J’hésite entre l’avion et le bus." },
+            { speaker: "Léa", text: "Le bus, c’est économique, mais c’est long…" },
+            { speaker: "Paul", text: "Oui, et l’avion est plus rapide, mais il faut arriver tôt à l’aéroport et attendre." },
+            { speaker: "Léa", text: "C’est vrai. Tout dépend de ton budget et de ton emploi du temps." },
+            { speaker: "Paul", text: "Exactement ! Bon, je vais comparer les prix et voir ce qui est le plus pratique." },
+            { speaker: "Léa", text: "Bonne idée ! Tiens-moi au courant !" }
+        ];
+
+        let synth = window.speechSynthesis;
+        let i = 0;
+        let isPaused = false;
+
+        // Function to select a French voice
+        function getFrenchVoice() {
+            const voices = window.speechSynthesis.getVoices();
+            // Prefer Google's French voices or system French voices
+            const frenchVoice = voices.find(voice => voice.lang === "fr-FR" && voice.name.includes("Google Français")) ||
+                                voices.find(voice => voice.lang === "fr-FR" && voice.name.includes("French")) ||
+                                voices.find(voice => voice.lang === "fr-FR");
+
+            if (frenchVoice) {
+                return frenchVoice;
+            } else {
+                console.warn("No French voice found. Falling back to default voice.");
+                return voices[0]; // Fallback to the default voice
+            }
+        }
+
+        // Load the dialogue into the dialogue box
+        function loadDialogue() {
+            let dialogueBox = document.getElementById("dialogue-box");
+            dialogueBox.innerHTML = "";
+            dialogue.forEach(line => {
+                let p = document.createElement("p");
+                p.innerHTML = `<span class="character">${line.speaker} :</span> ${line.text}`;
+                dialogueBox.appendChild(p);
+            });
+        }
+
+        // Play the dialogue
+        function playDialogue() {
+            if (isPaused) {
+                isPaused = false;
+                speakNextLine();
+                return;
+            }
+
+            i = 0;
+            isPaused = false;
+            speakNextLine();
+        }
+
+        // Pause the dialogue
+        function pauseDialogue() {
+            isPaused = true;
+            synth.cancel(); // Stop current speech
+        }
+
+        // Speak the next line of dialogue
+        function speakNextLine() {
+            if (i < dialogue.length && !isPaused) {
+                let msg = new SpeechSynthesisUtterance(dialogue[i].text);
+                msg.lang = "fr-FR";
+                msg.rate = 0.7; // Adjust the rate to make the speech sound less nasal
+                msg.pitch = 1.2; // Adjust the pitch to make the speech sound more natural
+
+                // Set the voice explicitly
+                const frenchVoice = getFrenchVoice();
+                if (frenchVoice) {
+                    msg.voice = frenchVoice;
+                }
+
+                msg.onend = () => {
+                    if (!isPaused) {
+                        i++;
+                        setTimeout(speakNextLine, 500);
+                    }
+                };
+
+                synth.speak(msg);
+            }
+        }
+
+        // Flashcards Section
+        let currentDeckIndex = 0;
+        const flashcards = [
+            { word: "Le train", img: "assets/train.jpg" },
+            { word: "Le TGV (Train à Grande Vitesse)", img: "assets/tgv.jpg" },
+            { word: "Le métro", img: "assets/metro.jpg" },
+            { word: "Le tramway", img: "assets/tramway.jpg" },
+            { word: "Le bus", img: "assets/bus.jpg" },
+            { word: "L'autocar", img: "assets/autocar.jpg" },
+            { word: "Le taxi", img: "assets/taxi.jpg" },
+            { word: "Le covoiturage", img: "assets/covoiturage.jpg" },
+            { word: "La voiture", img: "assets/voiture.jpg" },
+            { word: "La moto", img: "assets/moto.jpg" },
+            { word: "Le vélo", img: "assets/velo.jpg" },
+            { word: "Le scooter", img: "assets/scooter.jpg" },
+            { word: "La trottinette", img: "assets/trottinette.jpg" },
+            { word: "L'avion", img: "assets/avion.jpg" },
+            { word: "Le vol (direct, avec escale)", img: "assets/vol.jpg" },
+            { word: "Le bateau", img: "assets/bateau.jpg" },
+            { word: "Le ferry", img: "assets/ferry.jpg" },
+            { word: "La croisière", img: "assets/croisiere.jpg" },
+            { word: "Le camping-car", img: "assets/campingcar.jpg" },
+            { word: "Le téléphérique", img: "assets/telepherique.jpg" },
+            { word: "La montgolfière", img: "assets/montgolfiere.jpg" },
+            { word: "Voyager", img: "assets/voyager.jpg" },
+            { word: "Se déplacer", img: "assets/deplacer.jpg" },
+            { word: "Prendre (le train, le bus, etc.)", img: "assets/prendre.jpg" },
+            { word: "Monter dans", img: "assets/montedans.jpg" },
+            { word: "Descendre de", img: "assets/descendre.jpg" },
+            { word: "Conduire", img: "assets/conduire.jpg" },
+            { word: "Piloter", img: "assets/piloter.jpg" },
+            { word: "Louer (une voiture, un vélo, etc.)", img: "assets/louer.jpg" },
+            { word: "Réserver (un billet, une place, etc.)", img: "assets/reserver.jpg" },
+            { word: "Annuler une réservation", img: "assets/annuler.jpg" },
+            { word: "Rater (son train, son avion)", img: "assets/rater.jpg" },
+            { word: "Attendre", img: "assets/attendre.jpg" },
+            { word: "Faire la queue", img: "assets/queue.jpg" },
+            { word: "Changer de train/bus", img: "assets/changer.jpg" },
+            { word: "Faire une escale", img: "assets/escale.jpg" },
+            { word: "Atterrir", img: "assets/atterrir.jpg" },
+            { word: "Décoller", img: "assets/decoller.jpg" },
+            { word: "La gare (SNCF, routière, etc.)", img: "assets/gare.jpg" },
+            { word: "Le guichet", img: "assets/guichet.jpg" },
+            { word: "Le distributeur de billets", img: "assets/distributeur.jpg" },
+            { word: "Le composteur de billets", img: "assets/composteur.jpg" },
+            { word: "Le quai", img: "assets/quai.jpg" },
+            { word: "Le wagon", img: "assets/wagon.jpg" },
+            { word: "La place assise / debout", img: "assets/place.jpg" },
+            { word: "Le contrôleur", img: "assets/controleur.jpg" },
+            { word: "Le billet (aller simple, aller-retour)", img: "assets/billet.jpg" },
+            { word: "Le départ / l’arrivée", img: "assets/depart.jpg" },
+            { word: "L’aéroport", img: "assets/aeroport.jpg" },
+            { word: "Le terminal", img: "assets/terminal.jpg" },
+            { word: "L’embarquement", img: "assets/embarquement.jpg" },
+            { word: "La porte d’embarquement", img: "assets/porte.jpg" },
+            { word: "Le tapis roulant", img: "assets/tapis.jpg" },
+            { word: "La douane", img: "assets/douane.jpg" },
+            { word: "Le passeport", img: "assets/passeport.jpg" },
+            { word: "Le visa", img: "assets/visa.jpg" },
+            { word: "La carte d’embarquement", img: "assets/carte.jpg" },
+            { word: "L’enregistrement des bagages", img: "assets/enregistrement.jpg" },
+            { word: "Le bagage à main", img: "assets/bagagemain.jpg" },
+            { word: "La valise", img: "assets/valise.jpg" },
+            { word: "L’autoroute", img: "assets/autoroute.jpg" },
+            { word: "La route nationale", img: "assets/routenationale.jpg" },
+            { word: "Le péage", img: "assets/peage.jpg" },
+            { word: "Le rond-point", img: "assets/rondpoint.jpg" },
+            { word: "Les feux de circulation", img: "assets/feux.jpg" },
+            { word: "Le panneau de signalisation", img: "assets/panneau.jpg" },
+            { word: "La limitation de vitesse", img: "assets/limitation.jpg" },
+            { word: "Le GPS", img: "assets/gps.jpg" },
+            { word: "L’aire de repos", img: "assets/aire.jpg" },
+            { word: "La station-service", img: "assets/station.jpg" },
+            { word: "Le parking / le stationnement", img: "assets/parking.jpg" },
+            { word: "L’hôtel", img: "assets/hotel.jpg" },
+            { word: "L’auberge de jeunesse", img: "assets/auberge.jpg" },
+            { word: "Le gîte", img: "assets/gite.jpg" },
+            { word: "La chambre d’hôtes", img: "assets/chambre.jpg" },
+            { word: "Le camping", img: "assets/camping.jpg" },
+            { word: "Faire une réservation", img: "assets/reservation.jpg" },
+            { word: "La réception", img: "assets/reception.jpg" },
+            { word: "Le petit déjeuner inclus", img: "assets/petitdejeuner.jpg" },
+            { word: "Le check-in / le check-out", img: "assets/checkin.jpg" },
+            { word: "Un itinéraire", img: "assets/itineraire.jpg" },
+            { word: "Un plan / une carte", img: "assets/plan.jpg" },
+            { word: "Un guide touristique", img: "assets/guide.jpg" },
+            { word: "Un circuit", img: "assets/circuit.jpg" },
+            { word: "Les horaires de train / d’avion", img: "assets/horaires.jpg" },
+            { word: "Le décalage horaire", img: "assets/decalage.jpg" },
+            { word: "Les bagages perdus", img: "assets/bagagesperdus.jpg" },
+            { word: "Un voyage d’affaires", img: "assets/voyageaffaires.jpg" },
+            { word: "Un voyage touristique", img: "assets/voyagetouristique.jpg" },
+            { word: "Faire du stop / l’auto-stop", img: "assets/stop.jpg" }
+        ];
+
+        // Load the flashcards into the flashcard container
+        function loadFlashcards() {
+            let flashcardContainer = document.getElementById("flashcards");
+            flashcardContainer.innerHTML = "";
+            flashcards.forEach(item => {
+                let card = document.createElement("div");
+                card.classList.add("polaroid");
+                card.innerHTML = `
+                    <img src="${item.img}" alt="${item.word}">
+                    <div class="word">${item.word}</div>
+                    <button class="audio-button" onclick="playAudio('${item.word}')">🔊</button>
+                `;
+                flashcardContainer.appendChild(card);
+            });
+        }
+
+        // Switch between views
+        function switchView(view) {
+            let flashcardContainer = document.getElementById("flashcards");
+            let deckContainer = document.getElementById("deck-container");
+
+            if (view === "grid") {
+                flashcardContainer.className = "flashcard-container";
+                flashcardContainer.style.display = "flex";
+                deckContainer.style.display = "none";
+            } else if (view === "list") {
+                flashcardContainer.className = "flashcard-container list-view";
+                flashcardContainer.style.display = "flex";
+                deckContainer.style.display = "none";
+            } else if (view === "deck") {
+                flashcardContainer.style.display = "none";
+                deckContainer.style.display = "block";
+                updateDeck();
+            }
+        }
+
+        // Update the deck view with the current card
+        function updateDeck() {
+            document.getElementById("deck-image").src = flashcards[currentDeckIndex].img;
+            document.getElementById("deck-word").innerText = flashcards[currentDeckIndex].word;
+        }
+
+        // Move to the next card in the deck
+        function nextCard() {
+            currentDeckIndex = (currentDeckIndex + 1) % flashcards.length;
+            updateDeck();
+        }
+
+        // Move to the previous card in the deck
+        function prevCard() {
+            currentDeckIndex = (currentDeckIndex - 1 + flashcards.length) % flashcards.length;
+            updateDeck();
+        }
+
+        // Play audio for the current card in the deck
+        function playDeckAudio() {
+            let word = flashcards[currentDeckIndex].word;
+            playAudio(word);
+        }
+
+        // Play audio for a given word
+        function playAudio(word) {
+            responsiveVoice.speak(word, "French Female", {rate: 0.7, pitch: 1.2});
+        }
+
+        // Load the dialogue and flashcards when the page loads
+        window.onload = () => {
+            loadDialogue();
+            loadFlashcards();
+        }
+    </script>
+
+</body>
+</html>
