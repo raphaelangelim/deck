@@ -1,282 +1,370 @@
 <!DOCTYPE html>
-
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dialogue et Flashcards</title>
+    <title>Travel Flashcards</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+:root {
+    --primary-color: #007AFF;
+    --secondary-color: #005ecb;
+    --background-color: #fafafa;
+    --shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-        body {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 20px;
-            padding: 20px;
-            background-color: #fafafa;
-            overflow-x: hidden; /* Prevent horizontal scrolling */
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
 
-        .image-container {
-            width: 45%;
-            max-width: 500px;
-            margin-right: 20px;
-        }
+body {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
+    background-color: var(--background-color);
+    overflow-x: hidden;
+}
 
-        .image-container img {
-            width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+/* Hamburger menu styling */
+.hamburger {
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+    background-color: #f1f1f1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
 
-        .dialogue-container {
-            width: 45%;
-            max-width: 500px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            text-align: left;
-        }
+/* Vertical menu styling */
+#verticalMenu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 250px; /* Fixed width for the menu */
+    background-color: #f1f1f1;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+    left: -250px; /* Hide the menu by default */
+    transition: left 0.3s ease; /* Smooth transition */
+    z-index: 999;
+    padding-top: 60px; /* Add padding to avoid overlap with hamburger menu */
+}
 
-        .dialogue-button {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 15px;
-            background-color: #007AFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
-        }
+#verticalMenu.active {
+    left: 0; /* Show the menu */
+}
 
-        .dialogue-button:hover {
-            background-color: #005ecb;
-        }
+#verticalMenu li a {
+    display: block;
+    color: #000;
+    padding: 12px 16px;
+    text-decoration: none;
+}
 
-        .character {
-            font-weight: bold;
-            color: #007AFF;
-        }
+#verticalMenu li a.active {
+    background-color: #04AA6D;
+    color: white;
+}
 
-        /* Flashcard container styles */
-        .flashcard-container {
-            width: 100%;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: space-between;
-        }
+#verticalMenu li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
 
-        .polaroid {
-            position: relative;
-            background: white;
-            padding: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 30%;
-            transition: all 0.3s ease;
-        }
+/* Main content styling */
+#content {
+    margin-left: 0; /* No margin by default */
+    padding: 20px;
+    transition: margin-left 0.3s ease; /* Smooth transition */
+    padding-top: 60px; /* Add padding to avoid overlap with hamburger menu */
+}
 
-        .polaroid img {
-            width: 100%;
-            border-radius: 5px;
-        }
+#content.shifted {
+    margin-left: 250px; /* Shift content when menu is open */
+}
 
-        .word {
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
+.image-container, .dialogue-container {
+    width: 45%;
+    max-width: 500px;
+    margin-right: 20px;
+}
 
-        .audio-button {
-            margin-top: 10px;
-            font-size: 20px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: #007AFF;
-        }
+.image-container img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+}
 
-        /* List View */
-        .list-view .polaroid {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+.dialogue-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 15px;
+    text-align: left;
+}
 
-        .list-view .polaroid img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-        }
+.dialogue-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
 
-        .list-view .word {
-            font-size: 20px;
-            flex: 1;
-        }
+.dialogue-button:hover {
+    background-color: var(--secondary-color);
+}
 
-        /* Deck View (Instagram Style) */
-        .deck-container {
-            display: none;
-            position: relative;
-            width: 300px;
-            height: auto; /* Adjust height based on content */
-            margin: auto;
-            overflow: hidden;
-            text-align: center;
-            background: white;
-            padding: 20px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
+.character {
+    font-weight: bold;
+    color: var(--primary-color);
+}
 
-        .deck-container img {
-            width: 100%;
-            height: auto;
-            border-radius: 5px;
-        }
+.flashcard-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+}
 
-        .deck-word {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 15px 0;
-        }
+.polaroid {
+    position: relative;
+    background: white;
+    padding: 10px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    width: 30%;
+    transition: all 0.3s ease;
+}
 
-        .deck-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
+.polaroid img {
+    width: 100%;
+    border-radius: 5px;
+}
 
-        .deck-button {
-            background-color: #007AFF;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
-        }
+.word {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 10px;
+}
 
-        /* Buttons for switching views */
-        .view-buttons {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+.audio-button {
+    margin-top: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--primary-color);
+}
 
-        .view-buttons button {
-            padding: 10px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
-            background: #007AFF;
-            color: white;
-        }
+.list-view .polaroid {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
 
-        /* Mobile View */
-        @media (max-width: 768px) {
-            .image-container, .dialogue-container {
-                width: 100%;
-                margin-right: 0;
-            }
+.list-view .polaroid img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
 
-            .flashcard-container {
-                gap: 0; /* Remove gap between cards */
-            }
+.list-view .word {
+    font-size: 20px;
+    flex: 1;
+}
 
-            .polaroid {
-                width: 33.33%; /* 3 cards per row */
-                box-shadow: none; /* Remove shadow for a cleaner look */
-                border-radius: 0; /* Remove border radius for a seamless grid */
-            }
+.deck-container {
+    display: none;
+    position: relative;
+    width: 300px;
+    height: auto;
+    margin: auto;
+    overflow: hidden;
+    text-align: center;
+    background: white;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border-radius: 10px;
+}
 
-            .polaroid img {
-                border-radius: 0; /* Remove border radius for images */
-            }
+.deck-container img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
 
-            .word {
-                font-size: 18px; /* Adjust font size for smaller screens */
-            }
+.deck-word {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 15px 0;
+}
 
-            /* Adjust Deck View for Mobile */
-            .deck-container {
-                width: 90%; /* Make the deck container wider on mobile */
-                height: auto; /* Allow height to adjust based on content */
-                padding: 15px; /* Adjust padding for better spacing */
-            }
+.deck-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
 
-            .deck-word {
-                font-size: 20px; /* Adjust font size for smaller screens */
-                margin: 10px 0; /* Adjust margin for better spacing */
-            }
+.deck-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
 
-            .deck-buttons {
-                margin-top: 15px; /* Add more space above buttons */
-            }
+.view-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
 
-            .deck-button {
-                padding: 8px 15px; /* Adjust button size for mobile */
-            }
-        }
+.view-buttons button {
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    background: var(--primary-color);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .image-container, .dialogue-container {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .flashcard-container {
+        gap: 0;
+    }
+
+    .polaroid {
+        width: 33.33%;
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .polaroid img {
+        border-radius: 0;
+    }
+
+    .word {
+        font-size: 18px;
+    }
+
+    .deck-container {
+        width: 90%;
+        height: auto;
+        padding: 15px;
+    }
+
+    .deck-word {
+        font-size: 20px;
+        margin: 10px 0;
+    }
+
+    .deck-buttons {
+        margin-top: 15px;
+    }
+
+    .deck-button {
+        padding: 8px 15px;
+    }
+}
     </style>
 </head>
 <body>
+<!-- Hamburger Menu -->
+<div class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">☰</div>
 
-    <!-- Image Section (Breakfast) -->
-    <div class="image-container">
-        <img src="assets/breakfast.webp" alt="Breakfast Image" />
-    </div>
+<!-- Vertical Menu -->
+<ul id="verticalMenu">
+    <li><a class="active" href="https://raphaelangelim.github.io/deck/">Travel</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#about">About</a></li>
+</ul>
 
-    <!-- Dialogue Section -->
-    <div class="dialogue-container">
-        <h3>Dialogue</h3>
-        <div id="dialogue-box" class="dialogue"></div>
-        <button class="dialogue-button" onclick="playDialogue()">▶ Écouter</button>
-        <button class="dialogue-button" onclick="pauseDialogue()">⏸ Pause</button>
-    </div>
+    <!-- Main Content -->
+    <div id="content">
+        <!-- Image Section (Breakfast) -->
+        <div class="image-container">
+            <img src="assets/breakfast.webp" alt="Breakfast Image" />
+        </div>
 
-    <!-- View Buttons -->
-    <div class="view-buttons">
-        <button onclick="switchView('grid')">📸 Grid View</button>
-        <button onclick="switchView('list')">📋 List View</button>
-        <button onclick="switchView('deck')">📖 Deck View</button>
-    </div>
+        <!-- Dialogue Section -->
+        <div class="dialogue-container">
+            <h3>Dialogue</h3>
+            <div id="dialogue-box" class="dialogue"></div>
+            <button class="dialogue-button" onclick="playDialogue()" aria-label="Play dialogue">▶ Écouter</button>
+            <button class="dialogue-button" onclick="pauseDialogue()" aria-label="Pause dialogue">⏸ Pause</button>
+        </div>
 
-    <!-- Flashcards Section -->
-    <div id="flashcards" class="flashcard-container">
-    </div>
+        <!-- View Buttons -->
+        <div class="view-buttons">
+            <button onclick="switchView('grid')" aria-label="Switch to grid view">📸 Grid View</button>
+            <button onclick="switchView('list')" aria-label="Switch to list view">📋 List View</button>
+            <button onclick="switchView('deck')" aria-label="Switch to deck view">📖 Deck View</button>
+        </div>
 
-    <!-- Deck View (Instagram Style) -->
-    <div id="deck-container" class="deck-container">
-        <img id="deck-image" src="https://via.placeholder.com/150" alt="Deck Image">
-        <div id="deck-word" class="deck-word"></div>
-        <button class="audio-button" onclick="playDeckAudio()">🔊</button>
-        <div class="deck-buttons">
-            <button class="deck-button" onclick="prevCard()">⬅</button>
-            <button class="deck-button" onclick="nextCard()">➡</button>
+        <!-- Flashcards Section -->
+        <div id="flashcards" class="flashcard-container"></div>
+
+        <!-- Deck View (Instagram Style) -->
+        <div id="deck-container" class="deck-container">
+            <img id="deck-image" src="https://via.placeholder.com/150" alt="Deck Image">
+            <div id="deck-word" class="deck-word"></div>
+            <button class="audio-button" onclick="playDeckAudio()" aria-label="Play audio">🔊</button>
+            <div class="deck-buttons">
+                <button class="deck-button" onclick="prevCard()" aria-label="Previous card">⬅</button>
+                <button class="deck-button" onclick="nextCard()" aria-label="Next card">➡</button>
+            </div>
         </div>
     </div>
 
     <!-- JavaScript -->
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
     <script>
-        // Dialogue Section
-        const dialogue = [
-            { speaker: "Paul", text: "Salut Léa ! Tu as prévu de partir quelque part bientôt ?" },
+      console.log("Script loaded"); // Add this at the top of your script
+
+
+// Function to toggle the vertical menu
+function toggleMenu() {
+    const verticalMenu = document.getElementById("verticalMenu");
+    const content = document.getElementById("content");
+
+    // Toggle the 'active' class on the menu and content
+    verticalMenu.classList.toggle("active");
+    content.classList.toggle("shifted");
+
+    console.log("Menu toggled"); // Debugging: Check if the function is called
+}
+
+
+// Dialogue Section
+const dialogue = [
+    // Add more dialogue lines here
+      { speaker: "Paul", text: "Salut Léa ! Tu as prévu de partir quelque part bientôt ?" },
             { speaker: "Léa", text: "Oui, je vais à Lyon le week-end prochain ! J'hésite encore entre prendre le train ou la voiture." },
             { speaker: "Paul", text: "Ah, ça dépend. Si tu veux éviter les embouteillages et arriver rapidement, le train est une bonne option." },
             { speaker: "Léa", text: "C’est vrai, mais avec la voiture, j’aurais plus de liberté pour me déplacer une fois sur place." },
@@ -288,88 +376,92 @@
             { speaker: "Léa", text: "C’est vrai. Tout dépend de ton budget et de ton emploi du temps." },
             { speaker: "Paul", text: "Exactement ! Bon, je vais comparer les prix et voir ce qui est le plus pratique." },
             { speaker: "Léa", text: "Bonne idée ! Tiens-moi au courant !" }
-        ];
+];
 
-        let synth = window.speechSynthesis;
-        let i = 0;
-        let isPaused = false;
+let synth = window.speechSynthesis;
+let i = 0;
+let isPaused = false;
 
-        // Function to select a French voice
-        function getFrenchVoice() {
-            const voices = window.speechSynthesis.getVoices();
-            // Prefer Google's French voices or system French voices
-            const frenchVoice = voices.find(voice => voice.lang === "fr-FR" && voice.name.includes("Google Français")) ||
-                                voices.find(voice => voice.lang === "fr-FR" && voice.name.includes("French")) ||
-                                voices.find(voice => voice.lang === "fr-FR");
+// Function to select a French voice
+function getFrenchVoice() {
+    const voices = window.speechSynthesis.getVoices();
+    const frenchVoice = voices.find(voice => voice.lang === "fr-FR" && voice.name.includes("Google Français")) ||
+                        voices.find(voice => voice.lang === "fr-FR" && voice.name.includes("French")) ||
+                        voices.find(voice => voice.lang === "fr-FR");
 
-            if (frenchVoice) {
-                return frenchVoice;
-            } else {
-                console.warn("No French voice found. Falling back to default voice.");
-                return voices[0]; // Fallback to the default voice
-            }
+    if (frenchVoice) {
+        return frenchVoice;
+    } else {
+        console.warn("No French voice found. Falling back to default voice.");
+        return voices[0];
+    }
+}
+
+// Load the dialogue into the dialogue box
+function loadDialogue() {
+    let dialogueBox = document.getElementById("dialogue-box");
+    dialogueBox.innerHTML = "";
+    dialogue.forEach(line => {
+        let p = document.createElement("p");
+        p.innerHTML = `<span class="character">${line.speaker} :</span> ${line.text}`;
+        dialogueBox.appendChild(p);
+    });
+}
+
+// Play the dialogue
+function playDialogue() {
+    if (isPaused) {
+        isPaused = false;
+        speakNextLine();
+        return;
+    }
+
+    i = 0;
+    isPaused = false;
+    speakNextLine();
+}
+
+// Pause the dialogue
+function pauseDialogue() {
+    isPaused = true;
+    synth.cancel();
+}
+
+// Speak the next line of dialogue
+function speakNextLine() {
+    if (i < dialogue.length && !isPaused) {
+        let msg = new SpeechSynthesisUtterance(dialogue[i].text);
+        msg.lang = "fr-FR";
+        msg.rate = 0.7;
+        msg.pitch = 1.2;
+
+        const frenchVoice = getFrenchVoice();
+        if (frenchVoice) {
+            msg.voice = frenchVoice;
         }
 
-        // Load the dialogue into the dialogue box
-        function loadDialogue() {
-            let dialogueBox = document.getElementById("dialogue-box");
-            dialogueBox.innerHTML = "";
-            dialogue.forEach(line => {
-                let p = document.createElement("p");
-                p.innerHTML = `<span class="character">${line.speaker} :</span> ${line.text}`;
-                dialogueBox.appendChild(p);
-            });
-        }
+        // Ensure the previous utterance is canceled before starting a new one
+        synth.cancel();
 
-        // Play the dialogue
-        function playDialogue() {
-            if (isPaused) {
-                isPaused = false;
-                speakNextLine();
-                return;
-            }
-
-            i = 0;
-            isPaused = false;
-            speakNextLine();
-        }
-
-        // Pause the dialogue
-        function pauseDialogue() {
-            isPaused = true;
-            synth.cancel(); // Stop current speech
-        }
-
-        // Speak the next line of dialogue
-        function speakNextLine() {
-            if (i < dialogue.length && !isPaused) {
-                let msg = new SpeechSynthesisUtterance(dialogue[i].text);
-                msg.lang = "fr-FR";
-                msg.rate = 0.7; // Adjust the rate to make the speech sound less nasal
-                msg.pitch = 1.2; // Adjust the pitch to make the speech sound more natural
-
-                // Set the voice explicitly
-                const frenchVoice = getFrenchVoice();
-                if (frenchVoice) {
-                    msg.voice = frenchVoice;
+        msg.onend = () => {
+            if (!isPaused) {
+                i++;
+                if (i < dialogue.length) {
+                    setTimeout(speakNextLine, 1000); // Add a delay before speaking the next line
                 }
-
-                msg.onend = () => {
-                    if (!isPaused) {
-                        i++;
-                        setTimeout(speakNextLine, 500);
-                    }
-                };
-
-                synth.speak(msg);
             }
-        }
+        };
 
-        // Flashcards Section
-        let currentDeckIndex = 0;
-        const flashcards = [
+        synth.speak(msg);
+    }
+}
 
-        // General Vocabulary
+// Flashcards Section
+let currentDeckIndex = 0;
+const flashcards = [
+   
+    // Add more flashcards here
+     // General Vocabulary
             { word: "S'asseoir", img: "assets/asseoir.jpg" },
             { word: "Lâcher prise", img: "assets/letting_go.jpg" },
             { word: "Maîtriser", img: "assets/master_control.jpg" },
@@ -518,79 +610,39 @@
             { word: "Un voyage d’affaires", img: "assets/voyageaffaires.jpg" },
             { word: "Un voyage touristique", img: "assets/voyagetouristique.jpg" },
             { word: "Faire du stop / l’auto-stop", img: "assets/stop.jpg" }
-        ];
+];
 
-        // Load the flashcards into the flashcard container
-        function loadFlashcards() {
-            let flashcardContainer = document.getElementById("flashcards");
-            flashcardContainer.innerHTML = "";
-            flashcards.forEach(item => {
-                let card = document.createElement("div");
-                card.classList.add("polaroid");
-                card.innerHTML = `
-                    <img src="${item.img}" alt="${item.word}">
-                    <div class="word">${item.word}</div>
-                    <button class="audio-button" onclick="playAudio('${item.word}')">🔊</button>
-                `;
-                flashcardContainer.appendChild(card);
-            });
-        }
+// Load the flashcards into the flashcard container
+function loadFlashcards() {
+    let flashcardContainer = document.getElementById("flashcards");
+    flashcardContainer.innerHTML = "";
+    flashcards.forEach(item => {
+        let card = document.createElement("div");
+        card.classList.add("polaroid");
+        card.innerHTML = `
+            <img src="${item.img}" alt="${item.word}" onerror="this.src='https://via.placeholder.com/150'">
+            <div class="word">${item.word}</div>
+            <button class="audio-button" onclick="playAudio('${item.word}')" aria-label="Play audio for ${item.word}">🔊</button>
+        `;
+        flashcardContainer.appendChild(card);
+    });
+}
 
-        // Switch between views
-        function switchView(view) {
-            let flashcardContainer = document.getElementById("flashcards");
-            let deckContainer = document.getElementById("deck-container");
+// Play audio for a given word
+function playAudio(word) {
+    if (typeof responsiveVoice !== "undefined") {
+        responsiveVoice.speak(word, "French Female", { rate: 0.7, pitch: 1.2 });
+    } else {
+        console.error("ResponsiveVoice library not loaded.");
+    }
+}
 
-            if (view === "grid") {
-                flashcardContainer.className = "flashcard-container";
-                flashcardContainer.style.display = "flex";
-                deckContainer.style.display = "none";
-            } else if (view === "list") {
-                flashcardContainer.className = "flashcard-container list-view";
-                flashcardContainer.style.display = "flex";
-                deckContainer.style.display = "none";
-            } else if (view === "deck") {
-                flashcardContainer.style.display = "none";
-                deckContainer.style.display = "block";
-                updateDeck();
-            }
-        }
-
-        // Update the deck view with the current card
-        function updateDeck() {
-            document.getElementById("deck-image").src = flashcards[currentDeckIndex].img;
-            document.getElementById("deck-word").innerText = flashcards[currentDeckIndex].word;
-        }
-
-        // Move to the next card in the deck
-        function nextCard() {
-            currentDeckIndex = (currentDeckIndex + 1) % flashcards.length;
-            updateDeck();
-        }
-
-        // Move to the previous card in the deck
-        function prevCard() {
-            currentDeckIndex = (currentDeckIndex - 1 + flashcards.length) % flashcards.length;
-            updateDeck();
-        }
-
-        // Play audio for the current card in the deck
-        function playDeckAudio() {
-            let word = flashcards[currentDeckIndex].word;
-            playAudio(word);
-        }
-
-        // Play audio for a given word
-        function playAudio(word) {
-            responsiveVoice.speak(word, "French Female", {rate: 0.7, pitch: 1.2});
-        }
-
-        // Load the dialogue and flashcards when the page loads
-        window.onload = () => {
-            loadDialogue();
-            loadFlashcards();
-        }
+// Load the dialogue and flashcards when the page loads
+window.onload = () => {
+    console.log("Page loaded"); // Add this to verify the page load
+    loadDialogue();
+    loadFlashcards();
+};
     </script>
-
 </body>
 </html>
