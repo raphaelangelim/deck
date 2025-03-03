@@ -86,16 +86,39 @@ body {
     padding: 20px;
     transition: margin-left 0.3s ease; /* Smooth transition */
     padding-top: 60px; /* Add padding to avoid overlap with hamburger menu */
+    text-align: center;
 }
 
 #content.shifted {
     margin-left: 250px; /* Shift content when menu is open */
 }
 
-.image-container, .dialogue-container {
-    width: 45%;
-    max-width: 500px;
-    margin-right: 20px;
+/* Image and Dialogue Containers */
+.image-container,
+.dialogue-container {
+    margin-bottom: 30px;
+    width: 45%; /* Each container takes 45% of the width */
+    max-width: 500px; /* Limit maximum width */
+    margin-right: 20px; /* Add spacing between the containers */
+}
+
+/* Ensure the containers are displayed side by side */
+@media (min-width: 768px) {
+    .image-container,
+    .dialogue-container {
+        display: inline-block; /* Display side by side */
+        vertical-align: top; /* Align to the top */
+    }
+}
+
+/* Mobile View */
+@media (max-width: 767px) {
+    .image-container,
+    .dialogue-container {
+        width: 100%; /* Full width on mobile */
+        margin-right: 0; /* Remove spacing */
+        display: block; /* Stack vertically */
+    }
 }
 
 .image-container img {
@@ -250,7 +273,8 @@ body {
 }
 
 @media (max-width: 768px) {
-    .image-container, .dialogue-container {
+    .image-container,
+    .dialogue-container {
         width: 100%;
         margin-right: 0;
     }
