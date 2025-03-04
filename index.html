@@ -316,6 +316,38 @@ body {
         padding: 8px 15px;
     }
 }
+
+/* Translation Tooltip Styling */
+.translatable {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.translatable:hover {
+    background-color: yellow;
+}
+
+.translatable::after {
+    content: attr(data-translation);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.translatable.active::after {
+    opacity: 1;
+}
     </style>
 </head>
 <body>
@@ -369,9 +401,6 @@ body {
     <!-- JavaScript -->
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
     <script>
-      console.log("Script loaded"); // Add this at the top of your script
-
-
 // Function to toggle the vertical menu
 function toggleMenu() {
     const verticalMenu = document.getElementById("verticalMenu");
@@ -380,26 +409,287 @@ function toggleMenu() {
     // Toggle the 'active' class on the menu and content
     verticalMenu.classList.toggle("active");
     content.classList.toggle("shifted");
-
-    console.log("Menu toggled"); // Debugging: Check if the function is called
 }
-
 
 // Dialogue Section
 const dialogue = [
-    // Add more dialogue lines here
-      { speaker: "Paul", text: "Salut Léa ! Tu as prévu de partir quelque part bientôt ?" },
-            { speaker: "Léa", text: "Oui, je vais à Lyon le week-end prochain ! J'hésite encore entre prendre le train ou la voiture." },
-            { speaker: "Paul", text: "Ah, ça dépend. Si tu veux éviter les embouteillages et arriver rapidement, le train est une bonne option." },
-            { speaker: "Léa", text: "C’est vrai, mais avec la voiture, j’aurais plus de liberté pour me déplacer une fois sur place." },
-            { speaker: "Paul", text: "Tu pourrais aussi louer une voiture directement à Lyon, comme ça, tu voyages en train et tu conduis sur place." },
-            { speaker: "Léa", text: "Pas bête ! Et toi, tu as des voyages prévus ?" },
-            { speaker: "Paul", text: "Oui, je pars en Espagne le mois prochain. J’hésite entre l’avion et le bus." },
-            { speaker: "Léa", text: "Le bus, c’est économique, mais c’est long…" },
-            { speaker: "Paul", text: "Oui, et l’avion est plus rapide, mais il faut arriver tôt à l’aéroport et attendre." },
-            { speaker: "Léa", text: "C’est vrai. Tout dépend de ton budget et de ton emploi du temps." },
-            { speaker: "Paul", text: "Exactement ! Bon, je vais comparer les prix et voir ce qui est le plus pratique." },
-            { speaker: "Léa", text: "Bonne idée ! Tiens-moi au courant !" }
+    {
+        speaker: "Paul",
+        text: "Salut Léa ! Tu as prévu de partir quelque part bientôt ?",
+        translation: "Hi Léa! Do you have plans to go somewhere soon?",
+        words: [
+            { text: "Salut", translation: "Hi" },
+            { text: "Léa", translation: "Léa" },
+            { text: "!", translation: "!" },
+            { text: "Tu", translation: "Do you" },
+            { text: "as", translation: "have" },
+            { text: "prévu", translation: "planned" },
+            { text: "de", translation: "to" },
+            { text: "partir", translation: "go" },
+            { text: "quelque part", translation: "somewhere" },
+            { text: "bientôt", translation: "soon" },
+            { text: "?", translation: "?" }
+        ]
+    },
+    {
+        speaker: "Léa",
+        text: "Oui, je vais à Lyon le week-end prochain ! J'hésite encore entre prendre le train ou la voiture.",
+        translation: "Yes, I'm going to Lyon next weekend! I'm still hesitating between taking the train or the car.",
+        words: [
+            { text: "Oui", translation: "Yes" },
+            { text: ",", translation: "," },
+            { text: "je", translation: "I" },
+            { text: "vais", translation: "am going" },
+            { text: "à", translation: "to" },
+            { text: "Lyon", translation: "Lyon" },
+            { text: "le", translation: "the" },
+            { text: "week-end", translation: "weekend" },
+            { text: "prochain", translation: "next" },
+            { text: "!", translation: "!" },
+            { text: "J'hésite", translation: "I'm hesitating" },
+            { text: "encore", translation: "still" },
+            { text: "entre", translation: "between" },
+            { text: "prendre", translation: "taking" },
+            { text: "le", translation: "the" },
+            { text: "train", translation: "train" },
+            { text: "ou", translation: "or" },
+            { text: "la", translation: "the" },
+            { text: "voiture", translation: "car" },
+            { text: ".", translation: "." }
+        ]
+    },
+    {
+        speaker: "Paul",
+        text: "Ah, ça dépend. Si tu veux éviter les embouteillages et arriver rapidement, le train est une bonne option.",
+        translation: "Ah, it depends. If you want to avoid traffic and arrive quickly, the train is a good option.",
+        words: [
+            { text: "Ah", translation: "Ah" },
+            { text: ",", translation: "," },
+            { text: "ça", translation: "it" },
+            { text: "dépend", translation: "depends" },
+            { text: ".", translation: "." },
+            { text: "Si", translation: "If" },
+            { text: "tu", translation: "you" },
+            { text: "veux", translation: "want" },
+            { text: "éviter", translation: "to avoid" },
+            { text: "les", translation: "the" },
+            { text: "embouteillages", translation: "traffic" },
+            { text: "et", translation: "and" },
+            { text: "arriver", translation: "arrive" },
+            { text: "rapidement", translation: "quickly" },
+            { text: ",", translation: "," },
+            { text: "le", translation: "the" },
+            { text: "train", translation: "train" },
+            { text: "est", translation: "is" },
+            { text: "une", translation: "a" },
+            { text: "bonne", translation: "good" },
+            { text: "option", translation: "option" },
+            { text: ".", translation: "." }
+        ]
+    },
+    {
+        speaker: "Léa",
+        text: "C’est vrai, mais avec la voiture, j’aurais plus de liberté pour me déplacer une fois sur place.",
+        translation: "That's true, but with the car, I would have more freedom to move around once there.",
+        words: [
+            { text: "C’est", translation: "That's" },
+            { text: "vrai", translation: "true" },
+            { text: ",", translation: "," },
+            { text: "mais", translation: "but" },
+            { text: "avec", translation: "with" },
+            { text: "la", translation: "the" },
+            { text: "voiture", translation: "car" },
+            { text: ",", translation: "," },
+            { text: "j’aurais", translation: "I would have" },
+            { text: "plus", translation: "more" },
+            { text: "de", translation: "of" },
+            { text: "liberté", translation: "freedom" },
+            { text: "pour", translation: "to" },
+            { text: "me", translation: "myself" },
+            { text: "déplacer", translation: "move around" },
+            { text: "une", translation: "once" },
+            { text: "fois", translation: "there" },
+            { text: "sur", translation: "on" },
+            { text: "place", translation: "place" },
+            { text: ".", translation: "." }
+        ]
+    },
+    {
+        speaker: "Paul",
+        text: "Tu pourrais aussi louer une voiture directement à Lyon, comme ça, tu voyages en train et tu conduis sur place.",
+        translation: "You could also rent a car directly in Lyon, so you travel by train and drive there.",
+        words: [
+            { text: "Tu", translation: "You" },
+            { text: "pourrais", translation: "could" },
+            { text: "aussi", translation: "also" },
+            { text: "louer", translation: "rent" },
+            { text: "une", translation: "a" },
+            { text: "voiture", translation: "car" },
+            { text: "directement", translation: "directly" },
+            { text: "à", translation: "in" },
+            { text: "Lyon", translation: "Lyon" },
+            { text: ",", translation: "," },
+            { text: "comme", translation: "so" },
+            { text: "ça", translation: "that" },
+            { text: ",", translation: "," },
+            { text: "tu", translation: "you" },
+            { text: "voyages", translation: "travel" },
+            { text: "en", translation: "by" },
+            { text: "train", translation: "train" },
+            { text: "et", translation: "and" },
+            { text: "tu", translation: "you" },
+            { text: "conduis", translation: "drive" },
+            { text: "sur", translation: "there" },
+            { text: "place", translation: "place" },
+            { text: ".", translation: "." }
+        ]
+    },
+    {
+        speaker: "Léa",
+        text: "Pas bête ! Et toi, tu as des voyages prévus ?",
+        translation: "Not bad! And you, do you have any trips planned?",
+        words: [
+            { text: "Pas", translation: "Not" },
+            { text: "bête", translation: "bad" },
+            { text: "!", translation: "!" },
+            { text: "Et", translation: "And" },
+            { text: "toi", translation: "you" },
+            { text: ",", translation: "," },
+            { text: "tu", translation: "do you" },
+            { text: "as", translation: "have" },
+            { text: "des", translation: "any" },
+            { text: "voyages", translation: "trips" },
+            { text: "prévus", translation: "planned" },
+            { text: "?", translation: "?" }
+        ]
+    },
+    {
+        speaker: "Paul",
+        text: "Oui, je pars en Espagne le mois prochain. J’hésite entre l’avion et le bus.",
+        translation: "Yes, I'm going to Spain next month. I'm hesitating between the plane and the bus.",
+        words: [
+            { text: "Oui", translation: "Yes" },
+            { text: ",", translation: "," },
+            { text: "je", translation: "I" },
+            { text: "pars", translation: "am going" },
+            { text: "en", translation: "to" },
+            { text: "Espagne", translation: "Spain" },
+            { text: "le", translation: "the" },
+            { text: "mois", translation: "month" },
+            { text: "prochain", translation: "next" },
+            { text: ".", translation: "." },
+            { text: "J’hésite", translation: "I'm hesitating" },
+            { text: "entre", translation: "between" },
+            { text: "l’avion", translation: "the plane" },
+            { text: "et", translation: "and" },
+            { text: "le", translation: "the" },
+            { text: "bus", translation: "bus" },
+            { text: ".", translation: "." }
+        ]
+    },
+    {
+        speaker: "Léa",
+        text: "Le bus, c’est économique, mais c’est long…",
+        translation: "The bus is economical, but it's long...",
+        words: [
+            { text: "Le", translation: "The" },
+            { text: "bus", translation: "bus" },
+            { text: ",", translation: "," },
+            { text: "c’est", translation: "is" },
+            { text: "économique", translation: "economical" },
+            { text: ",", translation: "," },
+            { text: "mais", translation: "but" },
+            { text: "c’est", translation: "it's" },
+            { text: "long", translation: "long" },
+            { text: "…", translation: "..." }
+        ]
+    },
+    {
+        speaker: "Paul",
+        text: "Oui, et l’avion est plus rapide, mais il faut arriver tôt à l’aéroport et attendre.",
+        translation: "Yes, and the plane is faster, but you have to arrive early at the airport and wait.",
+        words: [
+            { text: "Oui", translation: "Yes" },
+            { text: ",", translation: "," },
+            { text: "et", translation: "and" },
+            { text: "l’avion", translation: "the plane" },
+            { text: "est", translation: "is" },
+            { text: "plus", translation: "faster" },
+            { text: "rapide", translation: "quick" },
+            { text: ",", translation: "," },
+            { text: "mais", translation: "but" },
+            { text: "il", translation: "you" },
+            { text: "faut", translation: "have to" },
+            { text: "arriver", translation: "arrive" },
+            { text: "tôt", translation: "early" },
+            { text: "à", translation: "at" },
+            { text: "l’aéroport", translation: "the airport" },
+            { text: "et", translation: "and" },
+            { text: "attendre", translation: "wait" },
+            { text: ".", translation: "." }
+        ]
+    },
+    {
+        speaker: "Léa",
+        text: "C’est vrai. Tout dépend de ton budget et de ton emploi du temps.",
+        translation: "That's true. It all depends on your budget and schedule.",
+        words: [
+            { text: "C’est", translation: "That's" },
+            { text: "vrai", translation: "true" },
+            { text: ".", translation: "." },
+            { text: "Tout", translation: "It all" },
+            { text: "dépend", translation: "depends" },
+            { text: "de", translation: "on" },
+            { text: "ton", translation: "your" },
+            { text: "budget", translation: "budget" },
+            { text: "et", translation: "and" },
+            { text: "de", translation: "on" },
+            { text: "ton", translation: "your" },
+            { text: "emploi", translation: "schedule" },
+            { text: "du", translation: "of" },
+            { text: "temps", translation: "time" },
+            { text: ".", translation: "." }
+        ]
+    },
+    {
+        speaker: "Paul",
+        text: "Exactement ! Bon, je vais comparer les prix et voir ce qui est le plus pratique.",
+        translation: "Exactly! Well, I'll compare prices and see what's most convenient.",
+        words: [
+            { text: "Exactement", translation: "Exactly" },
+            { text: "!", translation: "!" },
+            { text: "Bon", translation: "Well" },
+            { text: ",", translation: "," },
+            { text: "je", translation: "I" },
+            { text: "vais", translation: "will" },
+            { text: "comparer", translation: "compare" },
+            { text: "les", translation: "the" },
+            { text: "prix", translation: "prices" },
+            { text: "et", translation: "and" },
+            { text: "voir", translation: "see" },
+            { text: "ce", translation: "what" },
+            { text: "qui", translation: "is" },
+            { text: "est", translation: "the" },
+            { text: "le", translation: "most" },
+            { text: "plus", translation: "convenient" },
+            { text: "pratique", translation: "practical" },
+            { text: ".", translation: "." }
+        ]
+    },
+    {
+        speaker: "Léa",
+        text: "Bonne idée ! Tiens-moi au courant !",
+        translation: "Good idea! Keep me posted!",
+        words: [
+            { text: "Bonne", translation: "Good" },
+            { text: "idée", translation: "idea" },
+            { text: "!", translation: "!" },
+            { text: "Tiens-moi", translation: "Keep me" },
+            { text: "au", translation: "posted" },
+            { text: "courant", translation: "informed" },
+            { text: "!", translation: "!" }
+        ]
+    }
 ];
 
 let synth = window.speechSynthesis;
@@ -427,7 +717,10 @@ function loadDialogue() {
     dialogueBox.innerHTML = "";
     dialogue.forEach(line => {
         let p = document.createElement("p");
-        p.innerHTML = `<span class="character">${line.speaker} :</span> ${line.text}`;
+        p.innerHTML = `<span class="character">${line.speaker} :</span> `;
+        line.words.forEach(word => {
+            p.innerHTML += `<span class="translatable" data-translation="${word.translation}">${word.text}</span> `;
+        });
         dialogueBox.appendChild(p);
     });
 }
@@ -483,157 +776,158 @@ function speakNextLine() {
 // Flashcards Section
 let currentDeckIndex = 0;
 const flashcards = [
-   
-    // Add more flashcards here
-     // General Vocabulary
-            { word: "S'asseoir", img: "assets/asseoir.jpg" },
-            { word: "Lâcher prise", img: "assets/letting_go.jpg" },
-            { word: "Maîtriser", img: "assets/master_control.jpg" },
-            { word: "Battre", img: "assets/beat_fight.jpg" },
-            { word: "Alléger", img: "assets/lighten_relieve.jpg" },
-            { word: "Lourd(e)", img: "assets/heavy.jpg" },
-            { word: "Moitié", img: "assets/half.jpg" },
-            { word: "Épaules", img: "assets/shoulders.jpg" },
-            
-            // Expressions & Concepts
-            { word: "En vouloir à quelqu’un", img: "assets/hold_grudge.jpg" },
-            { word: "Voir le verre à moitié plein", img: "assets/glass_half_full.jpg" },
-            { word: "Résoudre une situation", img: "assets/solve_situation.jpg" },
-            { word: "Une bulle", img: "assets/bubble.jpg" },
-            { word: "Il faut…", img: "assets/it_is_necessary.jpg" },
-            { word: "Reconnaître", img: "assets/recognize_acknowledge.jpg" },
-            { word: "Cela", img: "assets/that_this.jpg" },
-            { word: "La plupart", img: "assets/majority_most.jpg" },
-            { word: "Un défi / des défis", img: "assets/challenge.jpg" },
+   // General Vocabulary
+   { word: "S'asseoir", img: "assets/asseoir.jpg", translation: "To sit down" },
+    { word: "Lâcher prise", img: "assets/letting_go.jpg", translation: "To let go" },
+    { word: "Maîtriser", img: "assets/master_control.jpg", translation: "To master" },
+    { word: "Battre", img: "assets/beat_fight.jpg", translation: "To beat" },
+    { word: "Alléger", img: "assets/lighten_relieve.jpg", translation: "To lighten" },
+    { word: "Lourd(e)", img: "assets/heavy.jpg", translation: "Heavy" },
+    { word: "Moitié", img: "assets/half.jpg", translation: "Half" },
+    { word: "Épaules", img: "assets/shoulders.jpg", translation: "Shoulders" },
 
-            { word: "Le plat", img: "assets/plat.jpg" },
-            { word: "Le repas", img: "assets/repas.jpg" },
-            { word: "Ivre", img: "assets/ivre.jpg" },
-            { word: "Saoul / Soûl", img: "assets/saoul.jpg" },
-            { word: "Bourré", img: "assets/bourre.jpg" },
-            { word: "La poêle", img: "assets/poele.jpg" },
-            { word: "La casserole", img: "assets/casserole.jpg" },
-            { word: "Le moule", img: "assets/moule.jpg" },
-            { word: "Le vin chaud", img: "assets/vin_chaud.jpg" },
-            { word: "Réfléchi / Médaillé", img: "assets/reflechi.jpg" },
+    // Expressions & Concepts
+    { word: "En vouloir à quelqu’un", img: "assets/hold_grudge.jpg", translation: "To hold a grudge against someone" },
+    { word: "Voir le verre à moitié plein", img: "assets/glass_half_full.jpg", translation: "To see the glass as half full" },
+    { word: "Résoudre une situation", img: "assets/solve_situation.jpg", translation: "To resolve a situation" },
+    { word: "Une bulle", img: "assets/bubble.jpg", translation: "A bubble" },
+    { word: "Il faut…", img: "assets/it_is_necessary.jpg", translation: "It is necessary to…" },
+    { word: "Reconnaître", img: "assets/recognize_acknowledge.jpg", translation: "To recognize/acknowledge" },
+    { word: "Cela", img: "assets/that_this.jpg", translation: "That/this" },
+    { word: "La plupart", img: "assets/majority_most.jpg", translation: "The majority/most" },
+    { word: "Un défi / des défis", img: "assets/challenge.jpg", translation: "A challenge/challenges" },
 
-            { word: "Le billet hebdomadaire", img: "assets/billet_hebdomadaire.jpg" },
-            { word: "L’abonnement hebdomadaire", img: "assets/abonnement_hebdomadaire.jpg" },
-            { word: "La pièce (de monnaie)", img: "assets/piece.jpg" },
-            { word: "Facile à utiliser", img: "assets/facile_utiliser.jpg" },
-            { word: "Convivial", img: "assets/convivial.jpg" },
-            { word: "Pratique", img: "assets/pratique.jpg" },
-            { word: "Commode", img: "assets/commode.jpg" },
-            { word: "Désactiver", img: "assets/desactiver.jpg" },
-            { word: "Désactivé", img: "assets/desactive.jpg" },
-            { word: "Désactivation", img: "assets/desactivation.jpg" },
-            { word: "Le billet quotidien", img: "assets/billet_quotidien.jpg" },
-            { word: "Le billet journalier", img: "assets/billet_journalier.jpg" },
+    // Food & Drink
+    { word: "Le plat", img: "assets/plat.jpg", translation: "The dish" },
+    { word: "Le repas", img: "assets/repas.jpg", translation: "The meal" },
+    { word: "Ivre", img: "assets/ivre.jpg", translation: "Drunk" },
+    { word: "Saoul / Soûl", img: "assets/saoul.jpg", translation: "Drunk" },
+    { word: "Bourré", img: "assets/bourre.jpg", translation: "Drunk" },
+    { word: "La poêle", img: "assets/poele.jpg", translation: "The frying pan" },
+    { word: "La casserole", img: "assets/casserole.jpg", translation: "The saucepan" },
+    { word: "Le moule", img: "assets/moule.jpg", translation: "The mold" },
+    { word: "Le vin chaud", img: "assets/vin_chaud.jpg", translation: "Mulled wine" },
+    { word: "Réfléchi / Médaillé", img: "assets/reflechi.jpg", translation: "Thoughtful/Medaled" },
 
-             { word: "Salut Léa ! Tu as prévu de partir quelque part bientôt ?", img: "assets/paul.jpg" },
-             { word: "Oui, je vais à Lyon le week-end prochain ! J'hésite encore entre prendre le train ou la voiture.", img: "assets/lea.jpg" },
-             { word: "Ah, ça dépend. Si tu veux éviter les embouteillages et arriver rapidement, le train est une bonne option.", img: "assets/paul.jpg" },
-             { word: "C’est vrai, mais avec la voiture, j’aurais plus de liberté pour me déplacer une fois sur place.", img: "assets/lea.jpg"  },
-             { word: "Tu pourrais aussi louer une voiture directement à Lyon, comme ça, tu voyages en train et tu conduis sur place.", img: "assets/paul.jpg" },
-             { word: "Pas bête ! Et toi, tu as des voyages prévus ?", img: "assets/lea.jpg"  },
-             { word: "Oui, je pars en Espagne le mois prochain. J’hésite entre l’avion et le bus.", img: "assets/paul.jpg" },
-             { word: "Le bus, c’est économique, mais c’est long…", img: "assets/lea.jpg"  },
-             { word: "Oui, et l’avion est plus rapide, mais il faut arriver tôt à l’aéroport et attendre.", img: "assets/paul.jpg" },
-             { word: "C’est vrai. Tout dépend de ton budget et de ton emploi du temps.", img: "assets/lea.jpg"  },
-             { word: "Exactement ! Bon, je vais comparer les prix et voir ce qui est le plus pratique.", img: "assets/paul.jpg" },
-             { word: "Bonne idée ! Tiens-moi au courant !", img: "assets/lea.jpg"  },
-             
-             
-             { word: "Le train", img: "assets/train.jpg" },
-            { word: "Le TGV (Train à Grande Vitesse)", img: "assets/tgv.jpg" },
-            { word: "Le métro", img: "assets/metro.jpg" },
-            { word: "Le tramway", img: "assets/tramway.jpg" },
-            { word: "Le bus", img: "assets/bus.jpg" },
-            { word: "L’autocar", img: "assets/autocar.jpg" },
-            { word: "Le taxi", img: "assets/taxi.jpg" },
-            { word: "Le covoiturage", img: "assets/covoiturage.jpg" },
-            { word: "La voiture", img: "assets/voiture.jpg" },
-            { word: "La moto", img: "assets/moto.jpg" },
-            { word: "Le vélo", img: "assets/velo.jpg" },
-            { word: "Le scooter", img: "assets/scooter.jpg" },
-            { word: "La trottinette", img: "assets/trottinette.jpg" },
-            { word: "L’avion", img: "assets/avion.jpg" },
-            { word: "Le vol (direct, avec escale)", img: "assets/vol.jpg" },
-            { word: "Le bateau", img: "assets/bateau.jpg" },
-            { word: "Le ferry", img: "assets/ferry.jpg" },
-            { word: "La croisière", img: "assets/croisiere.jpg" },
-            { word: "Le camping-car", img: "assets/campingcar.jpg" },
-            { word: "Le téléphérique", img: "assets/telepherique.jpg" },
-            { word: "La montgolfière", img: "assets/montgolfiere.jpg" },
-            { word: "Voyager", img: "assets/voyager.jpg" },
-            { word: "Se déplacer", img: "assets/deplacer.jpg" },
-            { word: "Prendre (le train, le bus, etc.)", img: "assets/prendre.jpg" },
-            { word: "Monter dans", img: "assets/montedans.jpg" },
-            { word: "Descendre de", img: "assets/descendre.jpg" },
-            { word: "Conduire", img: "assets/conduire.jpg" },
-            { word: "Piloter", img: "assets/piloter.jpg" },
-            { word: "Louer (une voiture, un vélo, etc.)", img: "assets/louer.jpg" },
-            { word: "Réserver (un billet, une place, etc.)", img: "assets/reserver.jpg" },
-            { word: "Annuler une réservation", img: "assets/annuler.jpg" },
-            { word: "Rater (son train, son avion)", img: "assets/rater.jpg" },
-            { word: "Attendre", img: "assets/attendre.jpg" },
-            { word: "Faire la queue", img: "assets/queue.jpg" },
-            { word: "Changer de train/bus", img: "assets/changer.jpg" },
-            { word: "Faire une escale", img: "assets/escale.jpg" },
-            { word: "Atterrir", img: "assets/atterrir.jpg" },
-            { word: "Décoller", img: "assets/decoller.jpg" },
-            { word: "La gare (SNCF, routière, etc.)", img: "assets/gare.jpg" },
-            { word: "Le guichet", img: "assets/guichet.jpg" },
-            { word: "Le distributeur de billets", img: "assets/distributeur.jpg" },
-            { word: "Le composteur de billets", img: "assets/composteur.jpg" },
-            { word: "Le quai", img: "assets/quai.jpg" },
-            { word: "Le wagon", img: "assets/wagon.jpg" },
-            { word: "La place assise / debout", img: "assets/place.jpg" },
-            { word: "Le contrôleur", img: "assets/controleur.jpg" },
-            { word: "Le billet (aller simple, aller-retour)", img: "assets/billet.jpg" },
-            { word: "Le départ / l’arrivée", img: "assets/depart.jpg" },
-            { word: "L’aéroport", img: "assets/aeroport.jpg" },
-            { word: "Le terminal", img: "assets/terminal.jpg" },
-            { word: "L’embarquement", img: "assets/embarquement.jpg" },
-            { word: "La porte d’embarquement", img: "assets/porte.jpg" },
-            { word: "Le tapis roulant", img: "assets/tapis.jpg" },
-            { word: "La douane", img: "assets/douane.jpg" },
-            { word: "Le passeport", img: "assets/passeport.jpg" },
-            { word: "Le visa", img: "assets/visa.jpg" },
-            { word: "La carte d’embarquement", img: "assets/carte.jpg" },
-            { word: "L’enregistrement des bagages", img: "assets/enregistrement.jpg" },
-            { word: "Le bagage à main", img: "assets/bagagemain.jpg" },
-            { word: "La valise", img: "assets/valise.jpg" },
-            { word: "L’autoroute", img: "assets/autoroute.jpg" },
-            { word: "La route nationale", img: "assets/routenationale.jpg" },
-            { word: "Le péage", img: "assets/peage.jpg" },
-            { word: "Le rond-point", img: "assets/rondpoint.jpg" },
-            { word: "Les feux de circulation", img: "assets/feux.jpg" },
-            { word: "Le panneau de signalisation", img: "assets/panneau.jpg" },
-            { word: "La limitation de vitesse", img: "assets/limitation.jpg" },
-            { word: "Le GPS", img: "assets/gps.jpg" },
-            { word: "L’aire de repos", img: "assets/aire.jpg" },
-            { word: "La station-service", img: "assets/station.jpg" },
-            { word: "Le parking / le stationnement", img: "assets/parking.jpg" },
-            { word: "L’hôtel", img: "assets/hotel.jpg" },
-            { word: "L’auberge de jeunesse", img: "assets/auberge.jpg" },
-            { word: "Le gîte", img: "assets/gite.jpg" },
-            { word: "La chambre d’hôtes", img: "assets/chambre.jpg" },
-            { word: "Le camping", img: "assets/camping.jpg" },
-            { word: "Faire une réservation", img: "assets/reservation.jpg" },
-            { word: "La réception", img: "assets/reception.jpg" },
-            { word: "Le petit déjeuner inclus", img: "assets/petitdejeuner.jpg" },
-            { word: "Le check-in / le check-out", img: "assets/checkin.jpg" },
-            { word: "Un itinéraire", img: "assets/itineraire.jpg" },
-            { word: "Un plan / une carte", img: "assets/plan.jpg" },
-            { word: "Un guide touristique", img: "assets/guide.jpg" },
-            { word: "Un circuit", img: "assets/circuit.jpg" },
-            { word: "Les horaires de train / d’avion", img: "assets/horaires.jpg" },
-            { word: "Le décalage horaire", img: "assets/decalage.jpg" },
-            { word: "Les bagages perdus", img: "assets/bagagesperdus.jpg" },
-            { word: "Un voyage d’affaires", img: "assets/voyageaffaires.jpg" },
-            { word: "Un voyage touristique", img: "assets/voyagetouristique.jpg" },
-            { word: "Faire du stop / l’auto-stop", img: "assets/stop.jpg" }
+    // Transportation
+    { word: "Le billet hebdomadaire", img: "assets/billet_hebdomadaire.jpg", translation: "The weekly ticket" },
+    { word: "L’abonnement hebdomadaire", img: "assets/abonnement_hebdomadaire.jpg", translation: "The weekly subscription" },
+    { word: "La pièce (de monnaie)", img: "assets/piece.jpg", translation: "The coin" },
+    { word: "Facile à utiliser", img: "assets/facile_utiliser.jpg", translation: "Easy to use" },
+    { word: "Convivial", img: "assets/convivial.jpg", translation: "Friendly" },
+    { word: "Pratique", img: "assets/pratique.jpg", translation: "Practical" },
+    { word: "Commode", img: "assets/commode.jpg", translation: "Convenient" },
+    { word: "Désactiver", img: "assets/desactiver.jpg", translation: "To deactivate" },
+    { word: "Désactivé", img: "assets/desactive.jpg", translation: "Deactivated" },
+    { word: "Désactivation", img: "assets/desactivation.jpg", translation: "Deactivation" },
+    { word: "Le billet quotidien", img: "assets/billet_quotidien.jpg", translation: "The daily ticket" },
+    { word: "Le billet journalier", img: "assets/billet_journalier.jpg", translation: "The daily ticket" },
+
+    // Dialogue Phrases
+    { word: "Salut Léa ! Tu as prévu de partir quelque part bientôt ?", img: "assets/paul.jpg", translation: "Hi Léa! Do you have plans to go somewhere soon?" },
+    { word: "Oui, je vais à Lyon le week-end prochain ! J'hésite encore entre prendre le train ou la voiture.", img: "assets/lea.jpg", translation: "Yes, I'm going to Lyon next weekend! I'm still hesitating between taking the train or the car." },
+    { word: "Ah, ça dépend. Si tu veux éviter les embouteillages et arriver rapidement, le train est une bonne option.", img: "assets/paul.jpg", translation: "Ah, it depends. If you want to avoid traffic and arrive quickly, the train is a good option." },
+    { word: "C’est vrai, mais avec la voiture, j’aurais plus de liberté pour me déplacer une fois sur place.", img: "assets/lea.jpg", translation: "That's true, but with the car, I would have more freedom to move around once there." },
+    { word: "Tu pourrais aussi louer une voiture directement à Lyon, comme ça, tu voyages en train et tu conduis sur place.", img: "assets/paul.jpg", translation: "You could also rent a car directly in Lyon, so you travel by train and drive there." },
+    { word: "Pas bête ! Et toi, tu as des voyages prévus ?", img: "assets/lea.jpg", translation: "Not bad! And you, do you have any trips planned?" },
+    { word: "Oui, je pars en Espagne le mois prochain. J’hésite entre l’avion et le bus.", img: "assets/paul.jpg", translation: "Yes, I'm going to Spain next month. I'm hesitating between the plane and the bus." },
+    { word: "Le bus, c’est économique, mais c’est long…", img: "assets/lea.jpg", translation: "The bus is economical, but it's long..." },
+    { word: "Oui, et l’avion est plus rapide, mais il faut arriver tôt à l’aéroport et attendre.", img: "assets/paul.jpg", translation: "Yes, and the plane is faster, but you have to arrive early at the airport and wait." },
+    { word: "C’est vrai. Tout dépend de ton budget et de ton emploi du temps.", img: "assets/lea.jpg", translation: "That's true. It all depends on your budget and schedule." },
+    { word: "Exactement ! Bon, je vais comparer les prix et voir ce qui est le plus pratique.", img: "assets/paul.jpg", translation: "Exactly! Well, I'll compare prices and see what's most convenient." },
+    { word: "Bonne idée ! Tiens-moi au courant !", img: "assets/lea.jpg", translation: "Good idea! Keep me posted!" },
+
+    // Transportation Vocabulary
+    { word: "Le train", img: "assets/train.jpg", translation: "The train" },
+    { word: "Le TGV (Train à Grande Vitesse)", img: "assets/tgv.jpg", translation: "The high-speed train" },
+    { word: "Le métro", img: "assets/metro.jpg", translation: "The subway" },
+    { word: "Le tramway", img: "assets/tramway.jpg", translation: "The tram" },
+    { word: "Le bus", img: "assets/bus.jpg", translation: "The bus" },
+    { word: "L’autocar", img: "assets/autocar.jpg", translation: "The coach" },
+    { word: "Le taxi", img: "assets/taxi.jpg", translation: "The taxi" },
+    { word: "Le covoiturage", img: "assets/covoiturage.jpg", translation: "Carpooling" },
+    { word: "La voiture", img: "assets/voiture.jpg", translation: "The car" },
+    { word: "La moto", img: "assets/moto.jpg", translation: "The motorcycle" },
+    { word: "Le vélo", img: "assets/velo.jpg", translation: "The bicycle" },
+    { word: "Le scooter", img: "assets/scooter.jpg", translation: "The scooter" },
+    { word: "La trottinette", img: "assets/trottinette.jpg", translation: "The scooter" },
+    { word: "L’avion", img: "assets/avion.jpg", translation: "The airplane" },
+    { word: "Le vol (direct, avec escale)", img: "assets/vol.jpg", translation: "The flight (direct, with a layover)" },
+    { word: "Le bateau", img: "assets/bateau.jpg", translation: "The boat" },
+    { word: "Le ferry", img: "assets/ferry.jpg", translation: "The ferry" },
+    { word: "La croisière", img: "assets/croisiere.jpg", translation: "The cruise" },
+    { word: "Le camping-car", img: "assets/campingcar.jpg", translation: "The camper van" },
+    { word: "Le téléphérique", img: "assets/telepherique.jpg", translation: "The cable car" },
+    { word: "La montgolfière", img: "assets/montgolfiere.jpg", translation: "The hot air balloon" },
+    { word: "Voyager", img: "assets/voyager.jpg", translation: "To travel" },
+    { word: "Se déplacer", img: "assets/deplacer.jpg", translation: "To move around" },
+    { word: "Prendre (le train, le bus, etc.)", img: "assets/prendre.jpg", translation: "To take (the train, the bus, etc.)" },
+    { word: "Monter dans", img: "assets/montedans.jpg", translation: "To get on" },
+    { word: "Descendre de", img: "assets/descendre.jpg", translation: "To get off" },
+    { word: "Conduire", img: "assets/conduire.jpg", translation: "To drive" },
+    { word: "Piloter", img: "assets/piloter.jpg", translation: "To pilot" },
+    { word: "Louer (une voiture, un vélo, etc.)", img: "assets/louer.jpg", translation: "To rent (a car, a bike, etc.)" },
+    { word: "Réserver (un billet, une place, etc.)", img: "assets/reserver.jpg", translation: "To book (a ticket, a seat, etc.)" },
+    { word: "Annuler une réservation", img: "assets/annuler.jpg", translation: "To cancel a reservation" },
+    { word: "Rater (son train, son avion)", img: "assets/rater.jpg", translation: "To miss (one's train, flight)" },
+    { word: "Attendre", img: "assets/attendre.jpg", translation: "To wait" },
+    { word: "Faire la queue", img: "assets/queue.jpg", translation: "To queue" },
+    { word: "Changer de train/bus", img: "assets/changer.jpg", translation: "To change trains/buses" },
+    { word: "Faire une escale", img: "assets/escale.jpg", translation: "To make a stopover" },
+    { word: "Atterrir", img: "assets/atterrir.jpg", translation: "To land" },
+    { word: "Décoller", img: "assets/decoller.jpg", translation: "To take off" },
+    { word: "La gare (SNCF, routière, etc.)", img: "assets/gare.jpg", translation: "The train station" },
+    { word: "Le guichet", img: "assets/guichet.jpg", translation: "The ticket counter" },
+    { word: "Le distributeur de billets", img: "assets/distributeur.jpg", translation: "The ticket machine" },
+    { word: "Le composteur de billets", img: "assets/composteur.jpg", translation: "The ticket validator" },
+    { word: "Le quai", img: "assets/quai.jpg", translation: "The platform" },
+    { word: "Le wagon", img: "assets/wagon.jpg", translation: "The carriage" },
+    { word: "La place assise / debout", img: "assets/place.jpg", translation: "The seat/standing place" },
+    { word: "Le contrôleur", img: "assets/controleur.jpg", translation: "The ticket inspector" },
+    { word: "Le billet (aller simple, aller-retour)", img: "assets/billet.jpg", translation: "The ticket (one-way, round trip)" },
+    { word: "Le départ / l’arrivée", img: "assets/depart.jpg", translation: "The departure/arrival" },
+    { word: "L’aéroport", img: "assets/aeroport.jpg", translation: "The airport" },
+    { word: "Le terminal", img: "assets/terminal.jpg", translation: "The terminal" },
+    { word: "L’embarquement", img: "assets/embarquement.jpg", translation: "The boarding" },
+    { word: "La porte d’embarquement", img: "assets/porte.jpg", translation: "The boarding gate" },
+    { word: "Le tapis roulant", img: "assets/tapis.jpg", translation: "The conveyor belt" },
+    { word: "La douane", img: "assets/douane.jpg", translation: "The customs" },
+    { word: "Le passeport", img: "assets/passeport.jpg", translation: "The passport" },
+    { word: "Le visa", img: "assets/visa.jpg", translation: "The visa" },
+    { word: "La carte d’embarquement", img: "assets/carte.jpg", translation: "The boarding pass" },
+    { word: "L’enregistrement des bagages", img: "assets/enregistrement.jpg", translation: "The baggage check-in" },
+    { word: "Le bagage à main", img: "assets/bagagemain.jpg", translation: "The carry-on luggage" },
+    { word: "La valise", img: "assets/valise.jpg", translation: "The suitcase" },
+    { word: "L’autoroute", img: "assets/autoroute.jpg", translation: "The highway" },
+    { word: "La route nationale", img: "assets/routenationale.jpg", translation: "The national road" },
+    { word: "Le péage", img: "assets/peage.jpg", translation: "The toll" },
+    { word: "Le rond-point", img: "assets/rondpoint.jpg", translation: "The roundabout" },
+    { word: "Les feux de circulation", img: "assets/feux.jpg", translation: "The traffic lights" },
+    { word: "Le panneau de signalisation", img: "assets/panneau.jpg", translation: "The road sign" },
+    { word: "La limitation de vitesse", img: "assets/limitation.jpg", translation: "The speed limit" },
+    { word: "Le GPS", img: "assets/gps.jpg", translation: "The GPS" },
+    { word: "L’aire de repos", img: "assets/aire.jpg", translation: "The rest area" },
+    { word: "La station-service", img: "assets/station.jpg", translation: "The gas station" },
+    { word: "Le parking / le stationnement", img: "assets/parking.jpg", translation: "The parking lot" },
+    { word: "L’hôtel", img: "assets/hotel.jpg", translation: "The hotel" },
+    { word: "L’auberge de jeunesse", img: "assets/auberge.jpg", translation: "The youth hostel" },
+    { word: "Le gîte", img: "assets/gite.jpg", translation: "The guesthouse" },
+    { word: "La chambre d’hôtes", img: "assets/chambre.jpg", translation: "The guest room" },
+    { word: "Le camping", img: "assets/camping.jpg", translation: "The campsite" },
+    { word: "Faire une réservation", img: "assets/reservation.jpg", translation: "To make a reservation" },
+    { word: "La réception", img: "assets/reception.jpg", translation: "The reception" },
+    { word: "Le petit déjeuner inclus", img: "assets/petitdejeuner.jpg", translation: "Breakfast included" },
+    { word: "Le check-in / le check-out", img: "assets/checkin.jpg", translation: "The check-in/check-out" },
+    { word: "Un itinéraire", img: "assets/itineraire.jpg", translation: "An itinerary" },
+    { word: "Un plan / une carte", img: "assets/plan.jpg", translation: "A map" },
+    { word: "Un guide touristique", img: "assets/guide.jpg", translation: "A tourist guide" },
+    { word: "Un circuit", img: "assets/circuit.jpg", translation: "A tour" },
+    { word: "Les horaires de train / d’avion", img: "assets/horaires.jpg", translation: "The train/plane schedules" },
+    { word: "Le décalage horaire", img: "assets/decalage.jpg", translation: "The time difference" },
+    { word: "Les bagages perdus", img: "assets/bagagesperdus.jpg", translation: "Lost luggage" },
+    { word: "Un voyage d’affaires", img: "assets/voyageaffaires.jpg", translation: "A business trip" },
+    { word: "Un voyage touristique", img: "assets/voyagetouristique.jpg", translation: "A tourist trip" },
+    { word: "Faire du stop / l’auto-stop", img: "assets/stop.jpg", translation: "To hitchhike" }
 ];
 
 // Load the flashcards into the flashcard container
@@ -645,7 +939,7 @@ function loadFlashcards() {
         card.classList.add("polaroid");
         card.innerHTML = `
             <img src="${item.img}" alt="${item.word}" onerror="this.src='https://via.placeholder.com/150'">
-            <div class="word">${item.word}</div>
+            <div class="word translatable" data-translation="${item.translation}">${item.word}</div>
             <button class="audio-button" onclick="playAudio('${item.word}')" aria-label="Play audio for ${item.word}">🔊</button>
         `;
         flashcardContainer.appendChild(card);
@@ -661,9 +955,21 @@ function playAudio(word) {
     }
 }
 
+// Add click functionality for translations
+document.addEventListener('click', (e) => {
+    const translatable = e.target.closest('.translatable');
+    if (translatable) {
+        e.stopPropagation();
+        translatable.classList.toggle('active');
+    } else {
+        document.querySelectorAll('.translatable').forEach(word => {
+            word.classList.remove('active');
+        });
+    }
+});
+
 // Load the dialogue and flashcards when the page loads
 window.onload = () => {
-    console.log("Page loaded"); // Add this to verify the page load
     loadDialogue();
     loadFlashcards();
 };
