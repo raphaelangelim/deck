@@ -1,12 +1,10 @@
-AJOUTER MON PROPRE MOT AVEC LE BOUTON
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music, Shows, and Concerts Flashcards</title>
+    <title>Flashcards App</title>
     <style>
         :root {
             --primary-color: #007AFF;
@@ -33,7 +31,7 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
             overflow-x: hidden;
         }
 
-        /* Hamburger menu styling */
+        /* Hamburger Menu */
         .hamburger {
             font-size: 24px;
             cursor: pointer;
@@ -45,24 +43,24 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
             z-index: 1000;
         }
 
-        /* Vertical menu styling */
+        /* Vertical Menu */
         #verticalMenu {
             list-style-type: none;
             margin: 0;
             padding: 0;
-            width: 250px; /* Fixed width for the menu */
+            width: 250px;
             background-color: #f1f1f1;
             position: fixed;
             height: 100%;
             overflow: auto;
-            left: -250px; /* Hide the menu by default */
-            transition: left 0.3s ease; /* Smooth transition */
+            left: -250px;
+            transition: left 0.3s ease;
             z-index: 999;
-            padding-top: 60px; /* Add padding to avoid overlap with hamburger menu */
+            padding-top: 60px;
         }
 
         #verticalMenu.active {
-            left: 0; /* Show the menu */
+            left: 0;
         }
 
         #verticalMenu li a {
@@ -82,88 +80,47 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
             color: white;
         }
 
-        /* Main content styling */
+        /* Main Content */
         #content {
-            margin-left: 0; /* No margin by default */
+            margin-left: 0;
             padding: 20px;
-            transition: margin-left 0.3s ease; /* Smooth transition */
-            padding-top: 60px; /* Add padding to avoid overlap with hamburger menu */
+            transition: margin-left 0.3s ease;
+            padding-top: 60px;
             text-align: center;
         }
 
         #content.shifted {
-            margin-left: 250px; /* Shift content when menu is open */
+            margin-left: 250px;
         }
 
-        /* Image and Dialogue Containers */
-        .image-container,
-        .dialogue-container {
-            margin-bottom: 30px;
-            width: 45%; /* Each container takes 45% of the width */
-            max-width: 500px; /* Limit maximum width */
-            margin-right: 20px; /* Add spacing between the containers */
-        }
-
-        /* Ensure the containers are displayed side by side */
-        @media (min-width: 768px) {
-            .image-container,
-            .dialogue-container {
-                display: inline-block; /* Display side by side */
-                vertical-align: top; /* Align to the top */
-            }
-        }
-
-        /* Mobile View */
-        @media (max-width: 767px) {
-            .image-container,
-            .dialogue-container {
-                width: 100%; /* Full width on mobile */
-                margin-right: 0; /* Remove spacing */
-                display: block; /* Stack vertically */
-            }
-        }
-
-        .image-container img {
-            width: 100%;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-        }
-
+        /* Dialogue Container */
         .dialogue-container {
             background: white;
             border-radius: 10px;
             box-shadow: var(--shadow);
             padding: 15px;
             text-align: left;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 30px;
         }
 
-        .dialogue-button {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 15px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .dialogue-button:hover {
-            background-color: var(--secondary-color);
-        }
-
-        .character {
-            font-weight: bold;
+        .dialogue-container h3 {
+            margin-bottom: 10px;
             color: var(--primary-color);
         }
 
+        .dialogue-container p {
+            margin-bottom: 10px;
+        }
+
+        /* Flashcards Section */
         .flashcard-container {
             width: 100%;
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
-            justify-content: space-between;
+            justify-content: flex-start;
         }
 
         .polaroid {
@@ -172,8 +129,10 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
             padding: 10px;
             box-shadow: var(--shadow);
             text-align: center;
-            width: 30%;
+            width: calc(33.33% - 14px); /* 3 cards per row with gap */
             transition: all 0.3s ease;
+            margin-bottom: 20px;
+            box-sizing: border-box; /* Ensure padding is included in the width */
         }
 
         .polaroid img {
@@ -185,6 +144,7 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
             font-size: 24px;
             font-weight: bold;
             margin-top: 10px;
+            cursor: pointer; /* Make word clickable */
         }
 
         .audio-button {
@@ -194,6 +154,16 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
             background: none;
             border: none;
             color: var(--primary-color);
+        }
+
+        .delete-button {
+            margin-top: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: red;
+            display: none; /* Hide delete button by default */
         }
 
         .list-view .polaroid {
@@ -214,6 +184,37 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
             flex: 1;
         }
 
+        .list-view .delete-button {
+            display: inline-block; /* Show delete button in list view */
+        }
+
+        /* Translation Tooltip */
+        .translatable {
+            position: relative;
+        }
+
+        .translatable::after {
+            content: attr(data-translation);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .translatable.active::after {
+            opacity: 1;
+        }
+
+        /* Deck View */
         .deck-container {
             display: none;
             position: relative;
@@ -256,6 +257,7 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
             font-size: 16px;
         }
 
+        /* View Buttons */
         .view-buttons {
             width: 100%;
             display: flex;
@@ -274,202 +276,21 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
             color: white;
         }
 
+        /* Mobile View */
         @media (max-width: 768px) {
-            .image-container,
-            .dialogue-container {
-                width: 100%;
-                margin-right: 0;
-            }
-
-            .flashcard-container {
-                gap: 0;
-            }
-
             .polaroid {
-                width: 33.33%;
-                box-shadow: none;
-                border-radius: 0;
-            }
-
-            .polaroid img {
-                border-radius: 0;
-            }
-
-            .word {
-                font-size: 18px;
+                width: calc(50% - 10px); /* 2 cards per row on smaller screens */
             }
 
             .deck-container {
                 width: 90%;
-                height: auto;
-                padding: 15px;
-            }
-
-            .deck-word {
-                font-size: 20px;
-                margin: 10px 0;
-            }
-
-            .deck-buttons {
-                margin-top: 15px;
-            }
-
-            .deck-button {
-                padding: 8px 15px;
             }
         }
 
-        /* Translation Tooltip Styling */
-        .translatable {
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .translatable:hover {
-            background-color: yellow;
-        }
-
-        .translatable::after {
-            content: attr(data-translation);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #333;
-            color: #fff;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-        }
-
-        .translatable.active::after {
-            opacity: 1;
-        }
-
-        /* Add Flashcard Section */
-        #add-flashcard {
-            margin: 20px;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            text-align: left;
-        }
-
-        #add-flashcard input {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        #add-flashcard button {
-            padding: 10px 20px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #add-flashcard button:hover {
-            background-color: var(--secondary-color);
-        }
-
-        .delete-button {
-            margin-top: 10px;
-            font-size: 20px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: red;
-        }
-        /* Floating Add Button */
-        .add-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 24px;
-            cursor: pointer;
-            box-shadow: var(--shadow);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .add-button:hover {
-            background-color: var(--secondary-color);
-        }
-
-        /* Popup Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1001;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .modal-content input {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .modal-content button {
-            padding: 10px 20px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .modal-content button:hover {
-            background-color: var(--secondary-color);
-        }
-
-        .close-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--primary-color);
+        @media (max-width: 480px) {
+            .polaroid {
+                width: 100%; /* 1 card per row on very small screens */
+            }
         }
     </style>
 </head>
@@ -479,24 +300,19 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
 
     <!-- Vertical Menu -->
     <ul id="verticalMenu">
-        <li><a class="active"href="https://raphaelangelim.github.io/deck/">🗺️ Ma collection</a></li>
+        <li><a href="https://raphaelangelim.github.io/deck/">🗺️ Ma collection</a></li>
         <li><a href="https://raphaelangelim.github.io/musique/">🎤 Music</a></li>
-        <li><a href="https://raphaelangelim.github.io/Verbe/"> 🚣 Verbes</a></li>
+        <li><a class="active" href="https://raphaelangelim.github.io/Verbe/"> 🚣 Verbes</a></li>
     </ul>
 
     <!-- Main Content -->
     <div id="content">
-        <!-- Image Section (Concert) -->
-        <div class="image-container">
-            <img src="assets/mycollection.png" alt="Concert Image" />
-        </div>
-
         <!-- Dialogue Section -->
         <div class="dialogue-container">
-            <h3>Dialogue</h3>
-            <div id="dialogue-box" class="dialogue"></div>
-            <button class="dialogue-button" onclick="playDialogue()" aria-label="Play dialogue">▶ Écouter</button>
-            <button class="dialogue-button" onclick="pauseDialogue()" aria-label="Pause dialogue">⏸ Pause</button>
+            <h3>Welcome to the Flashcards App!</h3>
+            <p>
+                This app helps you create and manage your own flashcards. You can add words, translations, and images to make learning fun and effective. Use the floating "+" button to add new flashcards and switch between grid, list, and deck views to study them.
+            </p>
         </div>
 
         <!-- View Buttons -->
@@ -548,229 +364,6 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
             content.classList.toggle("shifted");
         }
 
-        // Dialogue Section ------------------------------------------------------------------------------------------------
-        const dialogue = [
-            {
-                speaker: "Sophie",
-                text: "Salut Paul ! Tu aimes cuisiner ?",
-                translation: "Hi Paul! Do you like cooking?",
-                words: [
-                    { text: "Salut", translation: "Hi" },
-                    { text: "Paul", translation: "Paul" },
-                    { text: "!", translation: "!" },
-                    { text: "Tu", translation: "Do you" },
-                    { text: "aimes", translation: "like" },
-                    { text: "cuisiner", translation: "cooking" },
-                    { text: "?", translation: "?" }
-                ]
-            },
-            {
-                speaker: "Paul",
-                text: "Oui, j’adore ça ! Surtout les plats italiens. Et toi ?",
-                translation: "Yes, I love it! Especially Italian dishes. And you?",
-                words: [
-                    { text: "Oui", translation: "Yes" },
-                    { text: ",", translation: "," },
-                    { text: "j’adore", translation: "I love" },
-                    { text: "ça", translation: "it" },
-                    { text: "!", translation: "!" },
-                    { text: "Surtout", translation: "Especially" },
-                    { text: "les", translation: "the" },
-                    { text: "plats", translation: "dishes" },
-                    { text: "italiens", translation: "Italian" },
-                    { text: ".", translation: "." },
-                    { text: "Et", translation: "And" },
-                    { text: "toi", translation: "you" },
-                    { text: "?", translation: "?" }
-                ]
-            },
-            {
-                speaker: "Sophie",
-                text: "Moi aussi ! Je fais souvent des pâtes et des pizzas. Mais j’aimerais apprendre à faire des desserts.",
-                translation: "Me too! I often make pasta and pizzas. But I’d like to learn how to make desserts.",
-                words: [
-                    { text: "Moi", translation: "Me" },
-                    { text: "aussi", translation: "too" },
-                    { text: "!", translation: "!" },
-                    { text: "Je", translation: "I" },
-                    { text: "fais", translation: "make" },
-                    { text: "souvent", translation: "often" },
-                    { text: "des", translation: "some" },
-                    { text: "pâtes", translation: "pasta" },
-                    { text: "et", translation: "and" },
-                    { text: "des", translation: "some" },
-                    { text: "pizzas", translation: "pizzas" },
-                    { text: ".", translation: "." },
-                    { text: "Mais", translation: "But" },
-                    { text: "j’aimerais", translation: "I’d like" },
-                    { text: "apprendre", translation: "to learn" },
-                    { text: "à", translation: "how to" },
-                    { text: "faire", translation: "make" },
-                    { text: "des", translation: "some" },
-                    { text: "desserts", translation: "desserts" },
-                    { text: ".", translation: "." }
-                ]
-            },
-            {
-                speaker: "Paul",
-                text: "C’est une bonne idée ! Tu as déjà essayé de faire un gâteau au chocolat ?",
-                translation: "That’s a good idea! Have you ever tried making a chocolate cake?",
-                words: [
-                    { text: "C’est", translation: "That’s" },
-                    { text: "une", translation: "a" },
-                    { text: "bonne", translation: "good" },
-                    { text: "idée", translation: "idea" },
-                    { text: "!", translation: "!" },
-                    { text: "Tu", translation: "Have you" },
-                    { text: "as", translation: "ever" },
-                    { text: "déjà", translation: "already" },
-                    { text: "essayé", translation: "tried" },
-                    { text: "de", translation: "to" },
-                    { text: "faire", translation: "make" },
-                    { text: "un", translation: "a" },
-                    { text: "gâteau", translation: "cake" },
-                    { text: "au", translation: "with" },
-                    { text: "chocolat", translation: "chocolate" },
-                    { text: "?", translation: "?" }
-                ]
-            },
-            {
-                speaker: "Sophie",
-                text: "Pas encore, mais j’ai une recette facile. Tu veux m’aider ?",
-                translation: "Not yet, but I have an easy recipe. Do you want to help me?",
-                words: [
-                    { text: "Pas", translation: "Not" },
-                    { text: "encore", translation: "yet" },
-                    { text: ",", translation: "," },
-                    { text: "mais", translation: "but" },
-                    { text: "j’ai", translation: "I have" },
-                    { text: "une", translation: "an" },
-                    { text: "recette", translation: "recipe" },
-                    { text: "facile", translation: "easy" },
-                    { text: ".", translation: "." },
-                    { text: "Tu", translation: "Do you" },
-                    { text: "veux", translation: "want" },
-                    { text: "m’aider", translation: "to help me" },
-                    { text: "?", translation: "?" }
-                ]
-            },
-            {
-                speaker: "Paul",
-                text: "Bien sûr ! On peut le faire ce week-end. J’apporte les ingrédients.",
-                translation: "Of course! We can do it this weekend. I’ll bring the ingredients.",
-                words: [
-                    { text: "Bien", translation: "Of" },
-                    { text: "sûr", translation: "course" },
-                    { text: "!", translation: "!" },
-                    { text: "On", translation: "We" },
-                    { text: "peut", translation: "can" },
-                    { text: "le", translation: "it" },
-                    { text: "faire", translation: "do" },
-                    { text: "ce", translation: "this" },
-                    { text: "week-end", translation: "weekend" },
-                    { text: ".", translation: "." },
-                    { text: "J’apporte", translation: "I’ll bring" },
-                    { text: "les", translation: "the" },
-                    { text: "ingrédients", translation: "ingredients" },
-                    { text: ".", translation: "." }
-                ]
-            },
-            {
-                speaker: "Sophie",
-                text: "Super ! À samedi alors !",
-                translation: "Great! See you on Saturday then!",
-                words: [
-                    { text: "Super", translation: "Great" },
-                    { text: "!", translation: "!" },
-                    { text: "À", translation: "See you" },
-                    { text: "samedi", translation: "on Saturday" },
-                    { text: "alors", translation: "then" },
-                    { text: "!", translation: "!" }
-                ]
-            }
-        ];
-
-        let synth = window.speechSynthesis;
-        let i = 0;
-        let isPaused = false;
-
-        // Function to select a French voice
-        function getFrenchVoice() {
-            const voices = window.speechSynthesis.getVoices();
-            const frenchVoice = voices.find(voice => voice.lang === "fr-FR" && voice.name.includes("Google Français")) ||
-                                voices.find(voice => voice.lang === "fr-FR" && voice.name.includes("French")) ||
-                                voices.find(voice => voice.lang === "fr-FR");
-
-            if (frenchVoice) {
-                return frenchVoice;
-            } else {
-                console.warn("No French voice found. Falling back to default voice.");
-                return voices[0];
-            }
-        }
-
-        // Load the dialogue into the dialogue box
-        function loadDialogue() {
-            let dialogueBox = document.getElementById("dialogue-box");
-            dialogueBox.innerHTML = "";
-            dialogue.forEach(line => {
-                let p = document.createElement("p");
-                p.innerHTML = `<span class="character">${line.speaker} :</span> `;
-                line.words.forEach(word => {
-                    p.innerHTML += `<span class="translatable" data-translation="${word.translation}">${word.text}</span> `;
-                });
-                dialogueBox.appendChild(p);
-            });
-        }
-
-        // Play the dialogue
-        function playDialogue() {
-            if (isPaused) {
-                isPaused = false;
-                speakNextLine();
-                return;
-            }
-
-            i = 0;
-            isPaused = false;
-            speakNextLine();
-        }
-
-        // Pause the dialogue
-        function pauseDialogue() {
-            isPaused = true;
-            synth.cancel();
-        }
-
-        // Speak the next line of dialogue
-        function speakNextLine() {
-            if (i < dialogue.length && !isPaused) {
-                let msg = new SpeechSynthesisUtterance(dialogue[i].text);
-                msg.lang = "fr-FR";
-                msg.rate = 0.7;
-                msg.pitch = 1.2;
-
-                const frenchVoice = getFrenchVoice();
-                if (frenchVoice) {
-                    msg.voice = frenchVoice;
-                }
-
-                synth.cancel();
-
-                msg.onend = () => {
-                    if (!isPaused) {
-                        i++;
-                        if (i < dialogue.length) {
-                            setTimeout(speakNextLine, 1000);
-                        }
-                    }
-                };
-
-                synth.speak(msg);
-            }
-        }
-
-        // Flashcards Section ----------------------------------------------------------------------------------------------
         let currentDeckIndex = 0;
         let flashcards = [];
 
@@ -833,7 +426,7 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
         // Load the flashcards into the flashcard container
         function loadFlashcards() {
             let flashcardContainer = document.getElementById("flashcards");
-            flashcardContainer.innerHTML = "";
+            flashcardContainer.innerHTML = ""; // Clear the container
             flashcards.forEach((item, index) => {
                 let card = document.createElement("div");
                 card.classList.add("polaroid");
@@ -844,6 +437,14 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
                     <button class="delete-button" onclick="deleteFlashcard(${index})" aria-label="Delete flashcard">🗑️</button>
                 `;
                 flashcardContainer.appendChild(card);
+            });
+
+            // Add click event listeners for translation tooltips
+            const translatables = document.querySelectorAll('.translatable');
+            translatables.forEach(translatable => {
+                translatable.addEventListener('click', () => {
+                    translatable.classList.toggle('active');
+                });
             });
         }
 
@@ -862,19 +463,6 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
                 console.error("ResponsiveVoice library not loaded.");
             }
         }
-
-        // Add click functionality for translations
-        document.addEventListener('click', (e) => {
-            const translatable = e.target.closest('.translatable');
-            if (translatable) {
-                e.stopPropagation();
-                translatable.classList.toggle('active');
-            } else {
-                document.querySelectorAll('.translatable').forEach(word => {
-                    word.classList.remove('active');
-                });
-            }
-        });
 
         // Function to switch between grid, list, and deck views
         function switchView(view) {
@@ -929,9 +517,8 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
             playAudio(currentCard.word);
         }
 
-        // Load the dialogue and flashcards when the page loads
+        // Load the flashcards when the page loads
         window.onload = () => {
-            loadDialogue();
             loadFlashcardsFromStorage();
             loadFlashcards();
             switchView('grid'); // Default to grid view
