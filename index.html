@@ -136,9 +136,10 @@
             padding: 10px;
             box-shadow: var(--shadow);
             text-align: center;
-            width: calc(33.33% - 14px);
+            width: calc(33.33% - 14px); /* 3 cards per row with gap */
             transition: all 0.3s ease;
             margin-bottom: 20px;
+            box-sizing: border-box; /* Ensure padding is included in the width */
         }
 
         .polaroid img {
@@ -168,6 +169,18 @@
             background: none;
             border: none;
             color: red;
+            display: none; /* Hide by default */
+        }
+
+        /* Hide delete button in grid and deck views */
+        .grid-view .delete-button,
+        .deck-view .delete-button {
+            display: none;
+        }
+
+        /* Show delete button in list view */
+        .list-view .delete-button {
+            display: inline-block;
         }
 
         /* Grid View */
@@ -459,6 +472,15 @@
                 `;
                 flashcardContainer.appendChild(card);
             });
+
+            // Hide delete buttons in grid and deck views
+            const deleteButtons = document.querySelectorAll('.delete-button');
+            const currentView = document.getElementById("flashcards").classList;
+            if (currentView.contains('grid-view') || currentView.contains('deck-view')) {
+                deleteButtons.forEach(button => button.style.display = 'none');
+            } else if (currentView.contains('list-view')) {
+                deleteButtons.forEach(button => button.style.display = 'inline-block');
+            }
         }
 
         // Function to delete a flashcard
@@ -498,6 +520,9 @@
                 deckContainer.style.display = "block";
                 loadDeckView(); // Load the first card in the deck
             }
+
+            // Update delete button visibility
+            loadFlashcards();
         }
 
         // Function to load the deck view
