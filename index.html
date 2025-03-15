@@ -31,7 +31,7 @@
             overflow-x: hidden;
         }
 
-        /* Hamburger Menu */
+        /* Hamburger menu styling */
         .hamburger {
             font-size: 24px;
             cursor: pointer;
@@ -43,7 +43,7 @@
             z-index: 1000;
         }
 
-        /* Vertical Menu */
+        /* Vertical menu styling */
         #verticalMenu {
             list-style-type: none;
             margin: 0;
@@ -80,7 +80,7 @@
             color: white;
         }
 
-        /* Main Content */
+        /* Main content styling */
         #content {
             margin-left: 0;
             padding: 20px;
@@ -93,25 +93,32 @@
             margin-left: 250px;
         }
 
-        /* Dialogue Container */
-        .dialogue-container {
-            background: white;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            padding: 15px;
-            text-align: left;
+        /* View Buttons */
+        .view-buttons {
             width: 100%;
-            max-width: 600px;
-            margin: 0 auto 30px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
-        .dialogue-container h3 {
-            margin-bottom: 10px;
-            color: var(--primary-color);
+        .view-buttons button {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            background: var(--primary-color);
+            color: white;
+            transition: background-color 0.3s ease;
         }
 
-        .dialogue-container p {
-            margin-bottom: 10px;
+        .view-buttons button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .view-buttons button.active {
+            background-color: var(--secondary-color);
         }
 
         /* Flashcards Section */
@@ -144,7 +151,6 @@
             font-size: 24px;
             font-weight: bold;
             margin-top: 10px;
-            cursor: pointer; /* Make word clickable */
         }
 
         .audio-button {
@@ -163,9 +169,26 @@
             background: none;
             border: none;
             color: red;
-            display: none; /* Hide delete button by default */
+            display: none; /* Hide by default */
         }
 
+        /* Hide delete button in grid and deck views */
+        .grid-view .delete-button,
+        .deck-view .delete-button {
+            display: none;
+        }
+
+        /* Show delete button in list view */
+        .list-view .delete-button {
+            display: inline-block;
+        }
+
+        /* Grid View */
+        .grid-view .polaroid {
+            width: calc(33.33% - 14px);
+        }
+
+        /* List View */
         .list-view .polaroid {
             width: 100%;
             display: flex;
@@ -184,37 +207,11 @@
             flex: 1;
         }
 
-        .list-view .delete-button {
-            display: inline-block; /* Show delete button in list view */
-        }
-
-        /* Translation Tooltip */
-        .translatable {
-            position: relative;
-        }
-
-        .translatable::after {
-            content: attr(data-translation);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #333;
-            color: #fff;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-        }
-
-        .translatable.active::after {
-            opacity: 1;
-        }
-
         /* Deck View */
+        .deck-view {
+            display: none;
+        }
+
         .deck-container {
             display: none;
             position: relative;
@@ -257,40 +254,85 @@
             font-size: 16px;
         }
 
-        /* View Buttons */
-        .view-buttons {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .view-buttons button {
-            padding: 10px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
-            background: var(--primary-color);
+        /* Floating Add Button */
+        .add-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
             color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
         }
 
-        /* Mobile View */
-        @media (max-width: 768px) {
-            .polaroid {
-                width: calc(50% - 10px); /* 2 cards per row on smaller screens */
-            }
-
-            .deck-container {
-                width: 90%;
-            }
+        .add-button:hover {
+            background-color: var(--secondary-color);
         }
 
-        @media (max-width: 480px) {
-            .polaroid {
-                width: 100%; /* 1 card per row on very small screens */
-            }
+        /* Popup Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal-content input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .modal-content button {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal-content button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--primary-color);
         }
     </style>
 </head>
@@ -307,14 +349,6 @@
 
     <!-- Main Content -->
     <div id="content">
-        <!-- Dialogue Section -->
-        <div class="dialogue-container">
-            <h3>Welcome to the Flashcards App!</h3>
-            <p>
-                This app helps you create and manage your own flashcards. You can add words, translations, and images to make learning fun and effective. Use the floating "+" button to add new flashcards and switch between grid, list, and deck views to study them.
-            </p>
-        </div>
-
         <!-- View Buttons -->
         <div class="view-buttons">
             <button onclick="switchView('grid')" aria-label="Switch to grid view">📸 Grid View</button>
@@ -347,7 +381,7 @@
             <h3>Add New Flashcard</h3>
             <input type="text" id="new-word" placeholder="Enter word" />
             <input type="text" id="new-translation" placeholder="Enter translation" />
-            <input type="file" id="new-image" accept="image/*" capture /> <!-- Added capture attribute -->
+            <input type="file" id="new-image" accept="image/*" />
             <button onclick="addFlashcard()">Add Flashcard</button>
         </div>
     </div>
@@ -384,10 +418,6 @@
             const word = document.getElementById('new-word').value;
             const translation = document.getElementById('new-translation').value;
             const imageFile = document.getElementById('new-image').files[0];
-
-            console.log("Word:", word); // Debugging
-            console.log("Translation:", translation); // Debugging
-            console.log("Image File:", imageFile); // Debugging
 
             if (word && translation && imageFile) {
                 const reader = new FileReader();
@@ -443,13 +473,14 @@
                 flashcardContainer.appendChild(card);
             });
 
-            // Add click event listeners for translation tooltips
-            const translatables = document.querySelectorAll('.translatable');
-            translatables.forEach(translatable => {
-                translatable.addEventListener('click', () => {
-                    translatable.classList.toggle('active');
-                });
-            });
+            // Hide delete buttons in grid and deck views
+            const deleteButtons = document.querySelectorAll('.delete-button');
+            const currentView = document.getElementById("flashcards").classList;
+            if (currentView.contains('grid-view') || currentView.contains('deck-view')) {
+                deleteButtons.forEach(button => button.style.display = 'none');
+            } else if (currentView.contains('list-view')) {
+                deleteButtons.forEach(button => button.style.display = 'inline-block');
+            }
         }
 
         // Function to delete a flashcard
@@ -473,9 +504,11 @@
             const flashcardContainer = document.getElementById("flashcards");
             const deckContainer = document.getElementById("deck-container");
 
-            deckContainer.style.display = "none";
+            // Reset all views
             flashcardContainer.classList.remove("grid-view", "list-view", "deck-view");
+            deckContainer.style.display = "none";
 
+            // Apply the selected view
             if (view === "grid") {
                 flashcardContainer.classList.add("grid-view");
                 flashcardContainer.style.display = "flex";
@@ -485,18 +518,25 @@
             } else if (view === "deck") {
                 flashcardContainer.style.display = "none";
                 deckContainer.style.display = "block";
-                loadDeckView();
+                loadDeckView(); // Load the first card in the deck
             }
+
+            // Update delete button visibility
+            loadFlashcards();
         }
 
         // Function to load the deck view
         function loadDeckView() {
             const deckImage = document.getElementById("deck-image");
             const deckWord = document.getElementById("deck-word");
-            const currentCard = flashcards[currentDeckIndex];
-
-            deckImage.src = currentCard.img;
-            deckWord.innerHTML = `<span class="translatable" data-translation="${currentCard.translation}">${currentCard.word}</span>`;
+            if (flashcards.length > 0) {
+                const currentCard = flashcards[currentDeckIndex];
+                deckImage.src = currentCard.img;
+                deckWord.innerHTML = `<span class="translatable" data-translation="${currentCard.translation}">${currentCard.word}</span>`;
+            } else {
+                deckImage.src = "https://via.placeholder.com/150";
+                deckWord.textContent = "No flashcards available";
+            }
         }
 
         // Function to navigate to the previous card in the deck
@@ -520,6 +560,23 @@
             const currentCard = flashcards[currentDeckIndex];
             playAudio(currentCard.word);
         }
+
+        // Function to handle translation tooltip
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('translatable')) {
+                event.target.classList.toggle('active');
+            }
+        });
+
+        // Function to close tooltip when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.classList.contains('translatable')) {
+                const translatables = document.querySelectorAll('.translatable');
+                translatables.forEach(translatable => {
+                    translatable.classList.remove('active');
+                });
+            }
+        });
 
         // Load the flashcards when the page loads
         window.onload = () => {
