@@ -347,7 +347,7 @@
             <h3>Add New Flashcard</h3>
             <input type="text" id="new-word" placeholder="Enter word" />
             <input type="text" id="new-translation" placeholder="Enter translation" />
-            <input type="file" id="new-image" accept="image/*" />
+            <input type="file" id="new-image" accept="image/*" capture /> <!-- Added capture attribute -->
             <button onclick="addFlashcard()">Add Flashcard</button>
         </div>
     </div>
@@ -384,6 +384,10 @@
             const word = document.getElementById('new-word').value;
             const translation = document.getElementById('new-translation').value;
             const imageFile = document.getElementById('new-image').files[0];
+
+            console.log("Word:", word); // Debugging
+            console.log("Translation:", translation); // Debugging
+            console.log("Image File:", imageFile); // Debugging
 
             if (word && translation && imageFile) {
                 const reader = new FileReader();
