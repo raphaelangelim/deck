@@ -1,372 +1,495 @@
+ADDING MY OWN WORD WITH BUTTON
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Travel Flashcards</title>
+    <title>Music, Shows, and Concerts Flashcards</title>
     <style>
         :root {
-    --primary-color: #007AFF;
-    --secondary-color: #005ecb;
-    --background-color: #fafafa;
-    --shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+            --primary-color: #007AFF;
+            --secondary-color: #005ecb;
+            --background-color: #fafafa;
+            --shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
 
-body {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 20px;
-    padding: 20px;
-    background-color: var(--background-color);
-    overflow-x: hidden;
-}
+        body {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px;
+            background-color: var(--background-color);
+            overflow-x: hidden;
+        }
 
-/* Hamburger menu styling */
-.hamburger {
-    font-size: 24px;
-    cursor: pointer;
-    padding: 10px;
-    background-color: #f1f1f1;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-}
+        /* Hamburger menu styling */
+        .hamburger {
+            font-size: 24px;
+            cursor: pointer;
+            padding: 10px;
+            background-color: #f1f1f1;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
 
-/* Vertical menu styling */
-#verticalMenu {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    width: 250px; /* Fixed width for the menu */
-    background-color: #f1f1f1;
-    position: fixed;
-    height: 100%;
-    overflow: auto;
-    left: -250px; /* Hide the menu by default */
-    transition: left 0.3s ease; /* Smooth transition */
-    z-index: 999;
-    padding-top: 60px; /* Add padding to avoid overlap with hamburger menu */
-}
+        /* Vertical menu styling */
+        #verticalMenu {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            width: 250px; /* Fixed width for the menu */
+            background-color: #f1f1f1;
+            position: fixed;
+            height: 100%;
+            overflow: auto;
+            left: -250px; /* Hide the menu by default */
+            transition: left 0.3s ease; /* Smooth transition */
+            z-index: 999;
+            padding-top: 60px; /* Add padding to avoid overlap with hamburger menu */
+        }
 
-#verticalMenu.active {
-    left: 0; /* Show the menu */
-}
+        #verticalMenu.active {
+            left: 0; /* Show the menu */
+        }
 
-#verticalMenu li a {
-    display: block;
-    color: #000;
-    padding: 12px 16px;
-    text-decoration: none;
-}
+        #verticalMenu li a {
+            display: block;
+            color: #000;
+            padding: 12px 16px;
+            text-decoration: none;
+        }
 
-#verticalMenu li a.active {
-    background-color: #04AA6D;
-    color: white;
-}
+        #verticalMenu li a.active {
+            background-color: #04AA6D;
+            color: white;
+        }
 
-#verticalMenu li a:hover:not(.active) {
-    background-color: #555;
-    color: white;
-}
+        #verticalMenu li a:hover:not(.active) {
+            background-color: #555;
+            color: white;
+        }
 
-/* Main content styling */
-#content {
-    margin-left: 0; /* No margin by default */
-    padding: 20px;
-    transition: margin-left 0.3s ease; /* Smooth transition */
-    padding-top: 60px; /* Add padding to avoid overlap with hamburger menu */
-    text-align: center;
-}
+        /* Main content styling */
+        #content {
+            margin-left: 0; /* No margin by default */
+            padding: 20px;
+            transition: margin-left 0.3s ease; /* Smooth transition */
+            padding-top: 60px; /* Add padding to avoid overlap with hamburger menu */
+            text-align: center;
+        }
 
-#content.shifted {
-    margin-left: 250px; /* Shift content when menu is open */
-}
+        #content.shifted {
+            margin-left: 250px; /* Shift content when menu is open */
+        }
 
-/* Image and Dialogue Containers */
-.image-container,
-.dialogue-container {
-    margin-bottom: 30px;
-    width: 45%; /* Each container takes 45% of the width */
-    max-width: 500px; /* Limit maximum width */
-    margin-right: 20px; /* Add spacing between the containers */
-}
+        /* Image and Dialogue Containers */
+        .image-container,
+        .dialogue-container {
+            margin-bottom: 30px;
+            width: 45%; /* Each container takes 45% of the width */
+            max-width: 500px; /* Limit maximum width */
+            margin-right: 20px; /* Add spacing between the containers */
+        }
 
-/* Ensure the containers are displayed side by side */
-@media (min-width: 768px) {
-    .image-container,
-    .dialogue-container {
-        display: inline-block; /* Display side by side */
-        vertical-align: top; /* Align to the top */
-    }
-}
+        /* Ensure the containers are displayed side by side */
+        @media (min-width: 768px) {
+            .image-container,
+            .dialogue-container {
+                display: inline-block; /* Display side by side */
+                vertical-align: top; /* Align to the top */
+            }
+        }
 
-/* Mobile View */
-@media (max-width: 767px) {
-    .image-container,
-    .dialogue-container {
-        width: 100%; /* Full width on mobile */
-        margin-right: 0; /* Remove spacing */
-        display: block; /* Stack vertically */
-    }
-}
+        /* Mobile View */
+        @media (max-width: 767px) {
+            .image-container,
+            .dialogue-container {
+                width: 100%; /* Full width on mobile */
+                margin-right: 0; /* Remove spacing */
+                display: block; /* Stack vertically */
+            }
+        }
 
-.image-container img {
-    width: 100%;
-    border-radius: 10px;
-    box-shadow: var(--shadow);
-}
+        .image-container img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
 
-.dialogue-container {
-    background: white;
-    border-radius: 10px;
-    box-shadow: var(--shadow);
-    padding: 15px;
-    text-align: left;
-}
+        .dialogue-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            padding: 15px;
+            text-align: left;
+        }
 
-.dialogue-button {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 10px 15px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
-}
+        .dialogue-button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
 
-.dialogue-button:hover {
-    background-color: var(--secondary-color);
-}
+        .dialogue-button:hover {
+            background-color: var(--secondary-color);
+        }
 
-.character {
-    font-weight: bold;
-    color: var(--primary-color);
-}
+        .character {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
 
-.flashcard-container {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-between;
-}
+        .flashcard-container {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
 
-.polaroid {
-    position: relative;
-    background: white;
-    padding: 10px;
-    box-shadow: var(--shadow);
-    text-align: center;
-    width: 30%;
-    transition: all 0.3s ease;
-}
+        .polaroid {
+            position: relative;
+            background: white;
+            padding: 10px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            width: 30%;
+            transition: all 0.3s ease;
+        }
 
-.polaroid img {
-    width: 100%;
-    border-radius: 5px;
-}
+        .polaroid img {
+            width: 100%;
+            border-radius: 5px;
+        }
 
-.word {
-    font-size: 24px;
-    font-weight: bold;
-    margin-top: 10px;
-}
+        .word {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
 
-.audio-button {
-    margin-top: 10px;
-    font-size: 20px;
-    cursor: pointer;
-    background: none;
-    border: none;
-    color: var(--primary-color);
-}
+        .audio-button {
+            margin-top: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--primary-color);
+        }
 
-.list-view .polaroid {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
+        .list-view .polaroid {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
 
-.list-view .polaroid img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-}
+        .list-view .polaroid img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
 
-.list-view .word {
-    font-size: 20px;
-    flex: 1;
-}
+        .list-view .word {
+            font-size: 20px;
+            flex: 1;
+        }
 
-.deck-container {
-    display: none;
-    position: relative;
-    width: 300px;
-    height: auto;
-    margin: auto;
-    overflow: hidden;
-    text-align: center;
-    background: white;
-    padding: 20px;
-    box-shadow: var(--shadow);
-    border-radius: 10px;
-}
+        .deck-container {
+            display: none;
+            position: relative;
+            width: 300px;
+            height: auto;
+            margin: auto;
+            overflow: hidden;
+            text-align: center;
+            background: white;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border-radius: 10px;
+        }
 
-.deck-container img {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
-}
+        .deck-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
 
-.deck-word {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 15px 0;
-}
+        .deck-word {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
 
-.deck-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
+        .deck-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
 
-.deck-button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
-}
+        .deck-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
 
-.view-buttons {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-}
+        .view-buttons {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
 
-.view-buttons button {
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
-    background: var(--primary-color);
-    color: white;
-}
+        .view-buttons button {
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            background: var(--primary-color);
+            color: white;
+        }
 
-@media (max-width: 768px) {
-    .image-container,
-    .dialogue-container {
-        width: 100%;
-        margin-right: 0;
-    }
+        @media (max-width: 768px) {
+            .image-container,
+            .dialogue-container {
+                width: 100%;
+                margin-right: 0;
+            }
 
-    .flashcard-container {
-        gap: 0;
-    }
+            .flashcard-container {
+                gap: 0;
+            }
 
-    .polaroid {
-        width: 33.33%;
-        box-shadow: none;
-        border-radius: 0;
-    }
+            .polaroid {
+                width: 33.33%;
+                box-shadow: none;
+                border-radius: 0;
+            }
 
-    .polaroid img {
-        border-radius: 0;
-    }
+            .polaroid img {
+                border-radius: 0;
+            }
 
-    .word {
-        font-size: 18px;
-    }
+            .word {
+                font-size: 18px;
+            }
 
-    .deck-container {
-        width: 90%;
-        height: auto;
-        padding: 15px;
-    }
+            .deck-container {
+                width: 90%;
+                height: auto;
+                padding: 15px;
+            }
 
-    .deck-word {
-        font-size: 20px;
-        margin: 10px 0;
-    }
+            .deck-word {
+                font-size: 20px;
+                margin: 10px 0;
+            }
 
-    .deck-buttons {
-        margin-top: 15px;
-    }
+            .deck-buttons {
+                margin-top: 15px;
+            }
 
-    .deck-button {
-        padding: 8px 15px;
-    }
-}
+            .deck-button {
+                padding: 8px 15px;
+            }
+        }
 
-/* Translation Tooltip Styling */
-.translatable {
-    position: relative;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
+        /* Translation Tooltip Styling */
+        .translatable {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-.translatable:hover {
-    background-color: yellow;
-}
+        .translatable:hover {
+            background-color: yellow;
+        }
 
-.translatable::after {
-    content: attr(data-translation);
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #333;
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 14px;
-    white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-}
+        .translatable::after {
+            content: attr(data-translation);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
 
-.translatable.active::after {
-    opacity: 1;
-}
+        .translatable.active::after {
+            opacity: 1;
+        }
+
+        /* Add Flashcard Section */
+        #add-flashcard {
+            margin: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            text-align: left;
+        }
+
+        #add-flashcard input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #add-flashcard button {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #add-flashcard button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .delete-button {
+            margin-top: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: red;
+        }
+        /* Floating Add Button */
+        .add-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .add-button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Popup Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal-content input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .modal-content button {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal-content button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
     </style>
 </head>
 <body>
     <!-- Hamburger Menu -->
     <div class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">☰</div>
 
-   <!-- Vertical Menu -------------------------------------------------------------------------------------------------->
-<ul id="verticalMenu">
-    <li><a  href="https://raphaelangelim.github.io/musique/">🎤 Music</a></li>
-    <li><a class="active" href="https://raphaelangelim.github.io/deck/">🗺️ Voyage</a></li>
-    <li><a  href="https://raphaelangelim.github.io/Verbe/"> 🚣 Verbes</a></li> <!-- New menu item for verbs -->
-</ul>
-<!-- Vertical Menu ------------------------------------------------------------------------------------------------------>
+    <!-- Vertical Menu -->
+    <ul id="verticalMenu">
+        <li><a href="https://raphaelangelim.github.io/musique/">🎤 Music</a></li>
+        <li><a href="https://raphaelangelim.github.io/deck/">🗺️ Voyage</a></li>
+        <li><a class="active" href="https://raphaelangelim.github.io/Verbe/"> 🚣 Verbes</a></li>
+    </ul>
 
     <!-- Main Content -->
     <div id="content">
-        <!-- Image Section (Breakfast) -->
+        <!-- Image Section (Concert) -->
         <div class="image-container">
-            <img src="assets/breakfast.webp" alt="Breakfast Image" />
+            <img src="assets/musique.jpg" alt="Concert Image" />
         </div>
 
         <!-- Dialogue Section -->
@@ -399,6 +522,21 @@ body {
         </div>
     </div>
 
+    <!-- Floating Add Button -->
+    <button class="add-button" onclick="openModal()">+</button>
+
+    <!-- Popup Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeModal()">×</button>
+            <h3>Add New Flashcard</h3>
+            <input type="text" id="new-word" placeholder="Enter word" />
+            <input type="text" id="new-translation" placeholder="Enter translation" />
+            <input type="file" id="new-image" accept="image/*" />
+            <button onclick="addFlashcard()">Add Flashcard</button>
+        </div>
+    </div>
+
     <!-- JavaScript -->
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
     <script>
@@ -411,285 +549,146 @@ body {
             content.classList.toggle("shifted");
         }
 
-        // Dialogue Section
+        // Dialogue Section ------------------------------------------------------------------------------------------------
         const dialogue = [
-           {
-        speaker: "Paul",
-        text: "Salut Léa ! Tu as prévu de partir quelque part bientôt ?",
-        translation: "Hi Léa! Do you have plans to go somewhere soon?",
-        words: [
-            { text: "Salut", translation: "Hi" },
-            { text: "Léa", translation: "Léa" },
-            { text: "!", translation: "!" },
-            { text: "Tu", translation: "Do you" },
-            { text: "as", translation: "have" },
-            { text: "prévu", translation: "planned" },
-            { text: "de", translation: "to" },
-            { text: "partir", translation: "go" },
-            { text: "quelque part", translation: "somewhere" },
-            { text: "bientôt", translation: "soon" },
-            { text: "?", translation: "?" }
-        ]
-    },
-    {
-        speaker: "Léa",
-        text: "Oui, je vais à Lyon le week-end prochain ! J'hésite encore entre prendre le train ou la voiture.",
-        translation: "Yes, I'm going to Lyon next weekend! I'm still hesitating between taking the train or the car.",
-        words: [
-            { text: "Oui", translation: "Yes" },
-            { text: ",", translation: "," },
-            { text: "je", translation: "I" },
-            { text: "vais", translation: "am going" },
-            { text: "à", translation: "to" },
-            { text: "Lyon", translation: "Lyon" },
-            { text: "le", translation: "the" },
-            { text: "week-end", translation: "weekend" },
-            { text: "prochain", translation: "next" },
-            { text: "!", translation: "!" },
-            { text: "J'hésite", translation: "I'm hesitating" },
-            { text: "encore", translation: "still" },
-            { text: "entre", translation: "between" },
-            { text: "prendre", translation: "taking" },
-            { text: "le", translation: "the" },
-            { text: "train", translation: "train" },
-            { text: "ou", translation: "or" },
-            { text: "la", translation: "the" },
-            { text: "voiture", translation: "car" },
-            { text: ".", translation: "." }
-        ]
-    },
-    {
-        speaker: "Paul",
-        text: "Ah, ça dépend. Si tu veux éviter les embouteillages et arriver rapidement, le train est une bonne option.",
-        translation: "Ah, it depends. If you want to avoid traffic and arrive quickly, the train is a good option.",
-        words: [
-            { text: "Ah", translation: "Ah" },
-            { text: ",", translation: "," },
-            { text: "ça", translation: "it" },
-            { text: "dépend", translation: "depends" },
-            { text: ".", translation: "." },
-            { text: "Si", translation: "If" },
-            { text: "tu", translation: "you" },
-            { text: "veux", translation: "want" },
-            { text: "éviter", translation: "to avoid" },
-            { text: "les", translation: "the" },
-            { text: "embouteillages", translation: "traffic" },
-            { text: "et", translation: "and" },
-            { text: "arriver", translation: "arrive" },
-            { text: "rapidement", translation: "quickly" },
-            { text: ",", translation: "," },
-            { text: "le", translation: "the" },
-            { text: "train", translation: "train" },
-            { text: "est", translation: "is" },
-            { text: "une", translation: "a" },
-            { text: "bonne", translation: "good" },
-            { text: "option", translation: "option" },
-            { text: ".", translation: "." }
-        ]
-    },
-    {
-        speaker: "Léa",
-        text: "C’est vrai, mais avec la voiture, j’aurais plus de liberté pour me déplacer une fois sur place.",
-        translation: "That's true, but with the car, I would have more freedom to move around once there.",
-        words: [
-            { text: "C’est", translation: "That's" },
-            { text: "vrai", translation: "true" },
-            { text: ",", translation: "," },
-            { text: "mais", translation: "but" },
-            { text: "avec", translation: "with" },
-            { text: "la", translation: "the" },
-            { text: "voiture", translation: "car" },
-            { text: ",", translation: "," },
-            { text: "j’aurais", translation: "I would have" },
-            { text: "plus", translation: "more" },
-            { text: "de", translation: "of" },
-            { text: "liberté", translation: "freedom" },
-            { text: "pour", translation: "to" },
-            { text: "me", translation: "myself" },
-            { text: "déplacer", translation: "move around" },
-            { text: "une", translation: "once" },
-            { text: "fois", translation: "there" },
-            { text: "sur", translation: "on" },
-            { text: "place", translation: "place" },
-            { text: ".", translation: "." }
-        ]
-    },
-    {
-        speaker: "Paul",
-        text: "Tu pourrais aussi louer une voiture directement à Lyon, comme ça, tu voyages en train et tu conduis sur place.",
-        translation: "You could also rent a car directly in Lyon, so you travel by train and drive there.",
-        words: [
-            { text: "Tu", translation: "You" },
-            { text: "pourrais", translation: "could" },
-            { text: "aussi", translation: "also" },
-            { text: "louer", translation: "rent" },
-            { text: "une", translation: "a" },
-            { text: "voiture", translation: "car" },
-            { text: "directement", translation: "directly" },
-            { text: "à", translation: "in" },
-            { text: "Lyon", translation: "Lyon" },
-            { text: ",", translation: "," },
-            { text: "comme", translation: "so" },
-            { text: "ça", translation: "that" },
-            { text: ",", translation: "," },
-            { text: "tu", translation: "you" },
-            { text: "voyages", translation: "travel" },
-            { text: "en", translation: "by" },
-            { text: "train", translation: "train" },
-            { text: "et", translation: "and" },
-            { text: "tu", translation: "you" },
-            { text: "conduis", translation: "drive" },
-            { text: "sur", translation: "there" },
-            { text: "place", translation: "place" },
-            { text: ".", translation: "." }
-        ]
-    },
-    {
-        speaker: "Léa",
-        text: "Pas bête ! Et toi, tu as des voyages prévus ?",
-        translation: "Not bad! And you, do you have any trips planned?",
-        words: [
-            { text: "Pas", translation: "Not" },
-            { text: "bête", translation: "bad" },
-            { text: "!", translation: "!" },
-            { text: "Et", translation: "And" },
-            { text: "toi", translation: "you" },
-            { text: ",", translation: "," },
-            { text: "tu", translation: "do you" },
-            { text: "as", translation: "have" },
-            { text: "des", translation: "any" },
-            { text: "voyages", translation: "trips" },
-            { text: "prévus", translation: "planned" },
-            { text: "?", translation: "?" }
-        ]
-    },
-    {
-        speaker: "Paul",
-        text: "Oui, je pars en Espagne le mois prochain. J’hésite entre l’avion et le bus.",
-        translation: "Yes, I'm going to Spain next month. I'm hesitating between the plane and the bus.",
-        words: [
-            { text: "Oui", translation: "Yes" },
-            { text: ",", translation: "," },
-            { text: "je", translation: "I" },
-            { text: "pars", translation: "am going" },
-            { text: "en", translation: "to" },
-            { text: "Espagne", translation: "Spain" },
-            { text: "le", translation: "the" },
-            { text: "mois", translation: "month" },
-            { text: "prochain", translation: "next" },
-            { text: ".", translation: "." },
-            { text: "J’hésite", translation: "I'm hesitating" },
-            { text: "entre", translation: "between" },
-            { text: "l’avion", translation: "the plane" },
-            { text: "et", translation: "and" },
-            { text: "le", translation: "the" },
-            { text: "bus", translation: "bus" },
-            { text: ".", translation: "." }
-        ]
-    },
-    {
-        speaker: "Léa",
-        text: "Le bus, c’est économique, mais c’est long…",
-        translation: "The bus is economical, but it's long...",
-        words: [
-            { text: "Le", translation: "The" },
-            { text: "bus", translation: "bus" },
-            { text: ",", translation: "," },
-            { text: "c’est", translation: "is" },
-            { text: "économique", translation: "economical" },
-            { text: ",", translation: "," },
-            { text: "mais", translation: "but" },
-            { text: "c’est", translation: "it's" },
-            { text: "long", translation: "long" },
-            { text: "…", translation: "..." }
-        ]
-    },
-    {
-        speaker: "Paul",
-        text: "Oui, et l’avion est plus rapide, mais il faut arriver tôt à l’aéroport et attendre.",
-        translation: "Yes, and the plane is faster, but you have to arrive early at the airport and wait.",
-        words: [
-            { text: "Oui", translation: "Yes" },
-            { text: ",", translation: "," },
-            { text: "et", translation: "and" },
-            { text: "l’avion", translation: "the plane" },
-            { text: "est", translation: "is" },
-            { text: "plus", translation: "faster" },
-            { text: "rapide", translation: "quick" },
-            { text: ",", translation: "," },
-            { text: "mais", translation: "but" },
-            { text: "il", translation: "you" },
-            { text: "faut", translation: "have to" },
-            { text: "arriver", translation: "arrive" },
-            { text: "tôt", translation: "early" },
-            { text: "à", translation: "at" },
-            { text: "l’aéroport", translation: "the airport" },
-            { text: "et", translation: "and" },
-            { text: "attendre", translation: "wait" },
-            { text: ".", translation: "." }
-        ]
-    },
-    {
-        speaker: "Léa",
-        text: "C’est vrai. Tout dépend de ton budget et de ton emploi du temps.",
-        translation: "That's true. It all depends on your budget and schedule.",
-        words: [
-            { text: "C’est", translation: "That's" },
-            { text: "vrai", translation: "true" },
-            { text: ".", translation: "." },
-            { text: "Tout", translation: "It all" },
-            { text: "dépend", translation: "depends" },
-            { text: "de", translation: "on" },
-            { text: "ton", translation: "your" },
-            { text: "budget", translation: "budget" },
-            { text: "et", translation: "and" },
-            { text: "de", translation: "on" },
-            { text: "ton", translation: "your" },
-            { text: "emploi", translation: "schedule" },
-            { text: "du", translation: "of" },
-            { text: "temps", translation: "time" },
-            { text: ".", translation: "." }
-        ]
-    },
-    {
-        speaker: "Paul",
-        text: "Exactement ! Bon, je vais comparer les prix et voir ce qui est le plus pratique.",
-        translation: "Exactly! Well, I'll compare prices and see what's most convenient.",
-        words: [
-            { text: "Exactement", translation: "Exactly" },
-            { text: "!", translation: "!" },
-            { text: "Bon", translation: "Well" },
-            { text: ",", translation: "," },
-            { text: "je", translation: "I" },
-            { text: "vais", translation: "will" },
-            { text: "comparer", translation: "compare" },
-            { text: "les", translation: "the" },
-            { text: "prix", translation: "prices" },
-            { text: "et", translation: "and" },
-            { text: "voir", translation: "see" },
-            { text: "ce", translation: "what" },
-            { text: "qui", translation: "is" },
-            { text: "est", translation: "the" },
-            { text: "le", translation: "most" },
-            { text: "plus", translation: "convenient" },
-            { text: "pratique", translation: "practical" },
-            { text: ".", translation: "." }
-        ]
-    },
-    {
-        speaker: "Léa",
-        text: "Bonne idée ! Tiens-moi au courant !",
-        translation: "Good idea! Keep me posted!",
-        words: [
-            { text: "Bonne", translation: "Good" },
-            { text: "idée", translation: "idea" },
-            { text: "!", translation: "!" },
-            { text: "Tiens-moi", translation: "Keep me" },
-            { text: "au", translation: "posted" },
-            { text: "courant", translation: "informed" },
-            { text: "!", translation: "!" }
-        ]
-    }
+            {
+                speaker: "Sophie",
+                text: "Salut Paul ! Tu aimes cuisiner ?",
+                translation: "Hi Paul! Do you like cooking?",
+                words: [
+                    { text: "Salut", translation: "Hi" },
+                    { text: "Paul", translation: "Paul" },
+                    { text: "!", translation: "!" },
+                    { text: "Tu", translation: "Do you" },
+                    { text: "aimes", translation: "like" },
+                    { text: "cuisiner", translation: "cooking" },
+                    { text: "?", translation: "?" }
+                ]
+            },
+            {
+                speaker: "Paul",
+                text: "Oui, j’adore ça ! Surtout les plats italiens. Et toi ?",
+                translation: "Yes, I love it! Especially Italian dishes. And you?",
+                words: [
+                    { text: "Oui", translation: "Yes" },
+                    { text: ",", translation: "," },
+                    { text: "j’adore", translation: "I love" },
+                    { text: "ça", translation: "it" },
+                    { text: "!", translation: "!" },
+                    { text: "Surtout", translation: "Especially" },
+                    { text: "les", translation: "the" },
+                    { text: "plats", translation: "dishes" },
+                    { text: "italiens", translation: "Italian" },
+                    { text: ".", translation: "." },
+                    { text: "Et", translation: "And" },
+                    { text: "toi", translation: "you" },
+                    { text: "?", translation: "?" }
+                ]
+            },
+            {
+                speaker: "Sophie",
+                text: "Moi aussi ! Je fais souvent des pâtes et des pizzas. Mais j’aimerais apprendre à faire des desserts.",
+                translation: "Me too! I often make pasta and pizzas. But I’d like to learn how to make desserts.",
+                words: [
+                    { text: "Moi", translation: "Me" },
+                    { text: "aussi", translation: "too" },
+                    { text: "!", translation: "!" },
+                    { text: "Je", translation: "I" },
+                    { text: "fais", translation: "make" },
+                    { text: "souvent", translation: "often" },
+                    { text: "des", translation: "some" },
+                    { text: "pâtes", translation: "pasta" },
+                    { text: "et", translation: "and" },
+                    { text: "des", translation: "some" },
+                    { text: "pizzas", translation: "pizzas" },
+                    { text: ".", translation: "." },
+                    { text: "Mais", translation: "But" },
+                    { text: "j’aimerais", translation: "I’d like" },
+                    { text: "apprendre", translation: "to learn" },
+                    { text: "à", translation: "how to" },
+                    { text: "faire", translation: "make" },
+                    { text: "des", translation: "some" },
+                    { text: "desserts", translation: "desserts" },
+                    { text: ".", translation: "." }
+                ]
+            },
+            {
+                speaker: "Paul",
+                text: "C’est une bonne idée ! Tu as déjà essayé de faire un gâteau au chocolat ?",
+                translation: "That’s a good idea! Have you ever tried making a chocolate cake?",
+                words: [
+                    { text: "C’est", translation: "That’s" },
+                    { text: "une", translation: "a" },
+                    { text: "bonne", translation: "good" },
+                    { text: "idée", translation: "idea" },
+                    { text: "!", translation: "!" },
+                    { text: "Tu", translation: "Have you" },
+                    { text: "as", translation: "ever" },
+                    { text: "déjà", translation: "already" },
+                    { text: "essayé", translation: "tried" },
+                    { text: "de", translation: "to" },
+                    { text: "faire", translation: "make" },
+                    { text: "un", translation: "a" },
+                    { text: "gâteau", translation: "cake" },
+                    { text: "au", translation: "with" },
+                    { text: "chocolat", translation: "chocolate" },
+                    { text: "?", translation: "?" }
+                ]
+            },
+            {
+                speaker: "Sophie",
+                text: "Pas encore, mais j’ai une recette facile. Tu veux m’aider ?",
+                translation: "Not yet, but I have an easy recipe. Do you want to help me?",
+                words: [
+                    { text: "Pas", translation: "Not" },
+                    { text: "encore", translation: "yet" },
+                    { text: ",", translation: "," },
+                    { text: "mais", translation: "but" },
+                    { text: "j’ai", translation: "I have" },
+                    { text: "une", translation: "an" },
+                    { text: "recette", translation: "recipe" },
+                    { text: "facile", translation: "easy" },
+                    { text: ".", translation: "." },
+                    { text: "Tu", translation: "Do you" },
+                    { text: "veux", translation: "want" },
+                    { text: "m’aider", translation: "to help me" },
+                    { text: "?", translation: "?" }
+                ]
+            },
+            {
+                speaker: "Paul",
+                text: "Bien sûr ! On peut le faire ce week-end. J’apporte les ingrédients.",
+                translation: "Of course! We can do it this weekend. I’ll bring the ingredients.",
+                words: [
+                    { text: "Bien", translation: "Of" },
+                    { text: "sûr", translation: "course" },
+                    { text: "!", translation: "!" },
+                    { text: "On", translation: "We" },
+                    { text: "peut", translation: "can" },
+                    { text: "le", translation: "it" },
+                    { text: "faire", translation: "do" },
+                    { text: "ce", translation: "this" },
+                    { text: "week-end", translation: "weekend" },
+                    { text: ".", translation: "." },
+                    { text: "J’apporte", translation: "I’ll bring" },
+                    { text: "les", translation: "the" },
+                    { text: "ingrédients", translation: "ingredients" },
+                    { text: ".", translation: "." }
+                ]
+            },
+            {
+                speaker: "Sophie",
+                text: "Super ! À samedi alors !",
+                translation: "Great! See you on Saturday then!",
+                words: [
+                    { text: "Super", translation: "Great" },
+                    { text: "!", translation: "!" },
+                    { text: "À", translation: "See you" },
+                    { text: "samedi", translation: "on Saturday" },
+                    { text: "alors", translation: "then" },
+                    { text: "!", translation: "!" }
+                ]
+            }
         ];
 
         let synth = window.speechSynthesis;
@@ -772,34 +771,88 @@ body {
             }
         }
 
-        // Flashcards Section
+        // Flashcards Section ----------------------------------------------------------------------------------------------
         let currentDeckIndex = 0;
-        const flashcards = [
-            { word: "S'asseoir", img: "assets/asseoir.jpg", translation: "To sit down" },
-            { word: "Lâcher prise", img: "assets/letting_go.jpg", translation: "To let go" },
-            { word: "Maîtriser", img: "assets/master_control.jpg", translation: "To master" },
-            { word: "Battre", img: "assets/beat_fight.jpg", translation: "To beat" },
-            { word: "Alléger", img: "assets/lighten_relieve.jpg", translation: "To lighten" },
-            { word: "Lourd(e)", img: "assets/heavy.jpg", translation: "Heavy" },
-            { word: "Moitié", img: "assets/half.jpg", translation: "Half" },
-            { word: "Épaules", img: "assets/shoulders.jpg", translation: "Shoulders" },
-            { word: "Faire du stop / l’auto-stop", img: "assets/stop.jpg", translation: "To hitchhike" }
-        ];
+        let flashcards = [];
+
+        // Function to open the modal
+        function openModal() {
+            const modal = document.getElementById("modal");
+            modal.style.display = "flex";
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            const modal = document.getElementById("modal");
+            modal.style.display = "none";
+        }
+
+        // Function to add a new flashcard
+        function addFlashcard() {
+            const word = document.getElementById('new-word').value;
+            const translation = document.getElementById('new-translation').value;
+            const imageFile = document.getElementById('new-image').files[0];
+
+            if (word && translation && imageFile) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const newFlashcard = {
+                        word: word,
+                        translation: translation,
+                        img: e.target.result
+                    };
+
+                    // Add the new flashcard to the flashcards array
+                    flashcards.push(newFlashcard);
+
+                    // Save the updated flashcards array to local storage
+                    localStorage.setItem('flashcards', JSON.stringify(flashcards));
+
+                    // Reload the flashcards display
+                    loadFlashcards();
+
+                    // Clear the input fields and close the modal
+                    document.getElementById('new-word').value = '';
+                    document.getElementById('new-translation').value = '';
+                    document.getElementById('new-image').value = '';
+                    closeModal();
+                };
+                reader.readAsDataURL(imageFile);
+            } else {
+                alert('Please fill in all fields and select an image.');
+            }
+        }
+
+        // Function to load flashcards from local storage
+        function loadFlashcardsFromStorage() {
+            const storedFlashcards = localStorage.getItem('flashcards');
+            if (storedFlashcards) {
+                flashcards = JSON.parse(storedFlashcards);
+            }
+        }
 
         // Load the flashcards into the flashcard container
         function loadFlashcards() {
             let flashcardContainer = document.getElementById("flashcards");
             flashcardContainer.innerHTML = "";
-            flashcards.forEach(item => {
+            flashcards.forEach((item, index) => {
                 let card = document.createElement("div");
                 card.classList.add("polaroid");
                 card.innerHTML = `
                     <img src="${item.img}" alt="${item.word}" onerror="this.src='https://via.placeholder.com/150'">
                     <div class="word translatable" data-translation="${item.translation}">${item.word}</div>
                     <button class="audio-button" onclick="playAudio('${item.word}')" aria-label="Play audio for ${item.word}">🔊</button>
+                    <button class="delete-button" onclick="deleteFlashcard(${index})" aria-label="Delete flashcard">🗑️</button>
                 `;
                 flashcardContainer.appendChild(card);
             });
+        }
+
+        // Function to delete a flashcard
+        function deleteFlashcard(index) {
+            flashcards.splice(index, 1);
+            localStorage.setItem('flashcards', JSON.stringify(flashcards));
+            loadFlashcards();
         }
 
         // Play audio for a given word
@@ -880,6 +933,7 @@ body {
         // Load the dialogue and flashcards when the page loads
         window.onload = () => {
             loadDialogue();
+            loadFlashcardsFromStorage();
             loadFlashcards();
             switchView('grid'); // Default to grid view
         };
