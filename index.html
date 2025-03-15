@@ -1,12 +1,10 @@
-AJOUTER MON PROPRE MOT AVEC LE BOUTON
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music, Shows, and Concerts Flashcards</title>
+    <title>Flashcards App</title>
     <style>
         :root {
             --primary-color: #007AFF;
@@ -163,7 +161,7 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
-            justify-content: space-between;
+            justify-content: flex-start; /* Ensure cards align properly */
         }
 
         .polaroid {
@@ -172,8 +170,9 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
             padding: 10px;
             box-shadow: var(--shadow);
             text-align: center;
-            width: 30%;
+            width: calc(33.33% - 20px); /* Adjust width to fit 3 cards per row */
             transition: all 0.3s ease;
+            margin-bottom: 20px; /* Add margin to prevent overlap */
         }
 
         .polaroid img {
@@ -286,9 +285,7 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
             }
 
             .polaroid {
-                width: 33.33%;
-                box-shadow: none;
-                border-radius: 0;
+                width: calc(50% - 20px); /* Adjust for smaller screens */
             }
 
             .polaroid img {
@@ -316,6 +313,12 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
 
             .deck-button {
                 padding: 8px 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .polaroid {
+                width: 100%; /* Full width on very small screens */
             }
         }
 
@@ -391,6 +394,7 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
             border: none;
             color: red;
         }
+
         /* Floating Add Button */
         .add-button {
             position: fixed;
@@ -479,24 +483,19 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
 
     <!-- Vertical Menu -->
     <ul id="verticalMenu">
-        <li><a class="active"href="https://raphaelangelim.github.io/deck/">🗺️ Ma collection</a></li>
+        <li><a href="https://raphaelangelim.github.io/deck/">🗺️ Ma collection</a></li>
         <li><a href="https://raphaelangelim.github.io/musique/">🎤 Music</a></li>
-        <li><a href="https://raphaelangelim.github.io/Verbe/"> 🚣 Verbes</a></li>
+        <li><a class="active" href="https://raphaelangelim.github.io/Verbe/"> 🚣 Verbes</a></li>
     </ul>
 
     <!-- Main Content -->
     <div id="content">
-        <!-- Image Section (Concert) -->
-        <div class="image-container">
-            <img src="assets/mycollection.png" alt="Concert Image" />
-        </div>
-
         <!-- Dialogue Section -->
         <div class="dialogue-container">
-            <h3>Dialogue</h3>
-            <div id="dialogue-box" class="dialogue"></div>
-            <button class="dialogue-button" onclick="playDialogue()" aria-label="Play dialogue">▶ Écouter</button>
-            <button class="dialogue-button" onclick="pauseDialogue()" aria-label="Pause dialogue">⏸ Pause</button>
+            <h3>Welcome to the Flashcards App!</h3>
+            <p>
+                This app helps you create and manage your own flashcards. You can add words, translations, and images to make learning fun and effective. Use the floating "+" button to add new flashcards and switch between grid, list, and deck views to study them.
+            </p>
         </div>
 
         <!-- View Buttons -->
@@ -548,229 +547,6 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
             content.classList.toggle("shifted");
         }
 
-        // Dialogue Section ------------------------------------------------------------------------------------------------
-        const dialogue = [
-            {
-                speaker: "Sophie",
-                text: "Salut Paul ! Tu aimes cuisiner ?",
-                translation: "Hi Paul! Do you like cooking?",
-                words: [
-                    { text: "Salut", translation: "Hi" },
-                    { text: "Paul", translation: "Paul" },
-                    { text: "!", translation: "!" },
-                    { text: "Tu", translation: "Do you" },
-                    { text: "aimes", translation: "like" },
-                    { text: "cuisiner", translation: "cooking" },
-                    { text: "?", translation: "?" }
-                ]
-            },
-            {
-                speaker: "Paul",
-                text: "Oui, j’adore ça ! Surtout les plats italiens. Et toi ?",
-                translation: "Yes, I love it! Especially Italian dishes. And you?",
-                words: [
-                    { text: "Oui", translation: "Yes" },
-                    { text: ",", translation: "," },
-                    { text: "j’adore", translation: "I love" },
-                    { text: "ça", translation: "it" },
-                    { text: "!", translation: "!" },
-                    { text: "Surtout", translation: "Especially" },
-                    { text: "les", translation: "the" },
-                    { text: "plats", translation: "dishes" },
-                    { text: "italiens", translation: "Italian" },
-                    { text: ".", translation: "." },
-                    { text: "Et", translation: "And" },
-                    { text: "toi", translation: "you" },
-                    { text: "?", translation: "?" }
-                ]
-            },
-            {
-                speaker: "Sophie",
-                text: "Moi aussi ! Je fais souvent des pâtes et des pizzas. Mais j’aimerais apprendre à faire des desserts.",
-                translation: "Me too! I often make pasta and pizzas. But I’d like to learn how to make desserts.",
-                words: [
-                    { text: "Moi", translation: "Me" },
-                    { text: "aussi", translation: "too" },
-                    { text: "!", translation: "!" },
-                    { text: "Je", translation: "I" },
-                    { text: "fais", translation: "make" },
-                    { text: "souvent", translation: "often" },
-                    { text: "des", translation: "some" },
-                    { text: "pâtes", translation: "pasta" },
-                    { text: "et", translation: "and" },
-                    { text: "des", translation: "some" },
-                    { text: "pizzas", translation: "pizzas" },
-                    { text: ".", translation: "." },
-                    { text: "Mais", translation: "But" },
-                    { text: "j’aimerais", translation: "I’d like" },
-                    { text: "apprendre", translation: "to learn" },
-                    { text: "à", translation: "how to" },
-                    { text: "faire", translation: "make" },
-                    { text: "des", translation: "some" },
-                    { text: "desserts", translation: "desserts" },
-                    { text: ".", translation: "." }
-                ]
-            },
-            {
-                speaker: "Paul",
-                text: "C’est une bonne idée ! Tu as déjà essayé de faire un gâteau au chocolat ?",
-                translation: "That’s a good idea! Have you ever tried making a chocolate cake?",
-                words: [
-                    { text: "C’est", translation: "That’s" },
-                    { text: "une", translation: "a" },
-                    { text: "bonne", translation: "good" },
-                    { text: "idée", translation: "idea" },
-                    { text: "!", translation: "!" },
-                    { text: "Tu", translation: "Have you" },
-                    { text: "as", translation: "ever" },
-                    { text: "déjà", translation: "already" },
-                    { text: "essayé", translation: "tried" },
-                    { text: "de", translation: "to" },
-                    { text: "faire", translation: "make" },
-                    { text: "un", translation: "a" },
-                    { text: "gâteau", translation: "cake" },
-                    { text: "au", translation: "with" },
-                    { text: "chocolat", translation: "chocolate" },
-                    { text: "?", translation: "?" }
-                ]
-            },
-            {
-                speaker: "Sophie",
-                text: "Pas encore, mais j’ai une recette facile. Tu veux m’aider ?",
-                translation: "Not yet, but I have an easy recipe. Do you want to help me?",
-                words: [
-                    { text: "Pas", translation: "Not" },
-                    { text: "encore", translation: "yet" },
-                    { text: ",", translation: "," },
-                    { text: "mais", translation: "but" },
-                    { text: "j’ai", translation: "I have" },
-                    { text: "une", translation: "an" },
-                    { text: "recette", translation: "recipe" },
-                    { text: "facile", translation: "easy" },
-                    { text: ".", translation: "." },
-                    { text: "Tu", translation: "Do you" },
-                    { text: "veux", translation: "want" },
-                    { text: "m’aider", translation: "to help me" },
-                    { text: "?", translation: "?" }
-                ]
-            },
-            {
-                speaker: "Paul",
-                text: "Bien sûr ! On peut le faire ce week-end. J’apporte les ingrédients.",
-                translation: "Of course! We can do it this weekend. I’ll bring the ingredients.",
-                words: [
-                    { text: "Bien", translation: "Of" },
-                    { text: "sûr", translation: "course" },
-                    { text: "!", translation: "!" },
-                    { text: "On", translation: "We" },
-                    { text: "peut", translation: "can" },
-                    { text: "le", translation: "it" },
-                    { text: "faire", translation: "do" },
-                    { text: "ce", translation: "this" },
-                    { text: "week-end", translation: "weekend" },
-                    { text: ".", translation: "." },
-                    { text: "J’apporte", translation: "I’ll bring" },
-                    { text: "les", translation: "the" },
-                    { text: "ingrédients", translation: "ingredients" },
-                    { text: ".", translation: "." }
-                ]
-            },
-            {
-                speaker: "Sophie",
-                text: "Super ! À samedi alors !",
-                translation: "Great! See you on Saturday then!",
-                words: [
-                    { text: "Super", translation: "Great" },
-                    { text: "!", translation: "!" },
-                    { text: "À", translation: "See you" },
-                    { text: "samedi", translation: "on Saturday" },
-                    { text: "alors", translation: "then" },
-                    { text: "!", translation: "!" }
-                ]
-            }
-        ];
-
-        let synth = window.speechSynthesis;
-        let i = 0;
-        let isPaused = false;
-
-        // Function to select a French voice
-        function getFrenchVoice() {
-            const voices = window.speechSynthesis.getVoices();
-            const frenchVoice = voices.find(voice => voice.lang === "fr-FR" && voice.name.includes("Google Français")) ||
-                                voices.find(voice => voice.lang === "fr-FR" && voice.name.includes("French")) ||
-                                voices.find(voice => voice.lang === "fr-FR");
-
-            if (frenchVoice) {
-                return frenchVoice;
-            } else {
-                console.warn("No French voice found. Falling back to default voice.");
-                return voices[0];
-            }
-        }
-
-        // Load the dialogue into the dialogue box
-        function loadDialogue() {
-            let dialogueBox = document.getElementById("dialogue-box");
-            dialogueBox.innerHTML = "";
-            dialogue.forEach(line => {
-                let p = document.createElement("p");
-                p.innerHTML = `<span class="character">${line.speaker} :</span> `;
-                line.words.forEach(word => {
-                    p.innerHTML += `<span class="translatable" data-translation="${word.translation}">${word.text}</span> `;
-                });
-                dialogueBox.appendChild(p);
-            });
-        }
-
-        // Play the dialogue
-        function playDialogue() {
-            if (isPaused) {
-                isPaused = false;
-                speakNextLine();
-                return;
-            }
-
-            i = 0;
-            isPaused = false;
-            speakNextLine();
-        }
-
-        // Pause the dialogue
-        function pauseDialogue() {
-            isPaused = true;
-            synth.cancel();
-        }
-
-        // Speak the next line of dialogue
-        function speakNextLine() {
-            if (i < dialogue.length && !isPaused) {
-                let msg = new SpeechSynthesisUtterance(dialogue[i].text);
-                msg.lang = "fr-FR";
-                msg.rate = 0.7;
-                msg.pitch = 1.2;
-
-                const frenchVoice = getFrenchVoice();
-                if (frenchVoice) {
-                    msg.voice = frenchVoice;
-                }
-
-                synth.cancel();
-
-                msg.onend = () => {
-                    if (!isPaused) {
-                        i++;
-                        if (i < dialogue.length) {
-                            setTimeout(speakNextLine, 1000);
-                        }
-                    }
-                };
-
-                synth.speak(msg);
-            }
-        }
-
-        // Flashcards Section ----------------------------------------------------------------------------------------------
         let currentDeckIndex = 0;
         let flashcards = [];
 
@@ -833,7 +609,7 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
         // Load the flashcards into the flashcard container
         function loadFlashcards() {
             let flashcardContainer = document.getElementById("flashcards");
-            flashcardContainer.innerHTML = "";
+            flashcardContainer.innerHTML = ""; // Clear the container
             flashcards.forEach((item, index) => {
                 let card = document.createElement("div");
                 card.classList.add("polaroid");
@@ -862,19 +638,6 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
                 console.error("ResponsiveVoice library not loaded.");
             }
         }
-
-        // Add click functionality for translations
-        document.addEventListener('click', (e) => {
-            const translatable = e.target.closest('.translatable');
-            if (translatable) {
-                e.stopPropagation();
-                translatable.classList.toggle('active');
-            } else {
-                document.querySelectorAll('.translatable').forEach(word => {
-                    word.classList.remove('active');
-                });
-            }
-        });
 
         // Function to switch between grid, list, and deck views
         function switchView(view) {
@@ -929,9 +692,25 @@ AJOUTER MON PROPRE MOT AVEC LE BOUTON
             playAudio(currentCard.word);
         }
 
-        // Load the dialogue and flashcards when the page loads
+        // Function to handle translation tooltip
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('translatable')) {
+                event.target.classList.toggle('active');
+            }
+        });
+
+        // Function to close tooltip when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.classList.contains('translatable')) {
+                const translatables = document.querySelectorAll('.translatable');
+                translatables.forEach(translatable => {
+                    translatable.classList.remove('active');
+                });
+            }
+        });
+
+        // Load the flashcards when the page loads
         window.onload = () => {
-            loadDialogue();
             loadFlashcardsFromStorage();
             loadFlashcards();
             switchView('grid'); // Default to grid view
