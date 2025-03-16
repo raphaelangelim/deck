@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Flashcards App</title>
     <style>
-                /* Add all your CSS styles here */
+               /* Add all your CSS styles here */
         /* ... (keep all your existing CSS styles) ... */
         :root {
             --primary-color: #007AFF;
@@ -394,6 +394,71 @@
             display: block; /* Show tooltip when active */
         }
 
+
+        /* Ensure 3 cards per row with no space in between */
+        .flashcard-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0; /* Remove gap between cards */
+            justify-content: flex-start;
+        }
+
+        .polaroid {
+            width: calc(33.33% - 2px); /* 3 cards per row with a 1px border on each side */
+            border-right: 1px solid black; /* Thin black line between cards */
+            border-bottom: 1px solid black; /* Thin black line between cards */
+            box-sizing: border-box; /* Ensure borders are included in the width */
+            margin: 0; /* Remove margin */
+            padding: 10px; /* Add padding inside the card */
+        }
+
+        /* Remove the right border for the last card in each row */
+        .polaroid:nth-child(3n) {
+            border-right: none;
+        }
+
+        /* Remove the bottom border for the last row */
+        .polaroid:nth-last-child(-n+3) {
+            border-bottom: none;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            .polaroid {
+                width: calc(33.33% - 2px); /* 3 cards per row on mobile */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .polaroid {
+                width: calc(33.33% - 2px); /* 3 cards per row on small mobile screens */
+            }
+        }
+
+        /* Translation Tooltip */
+        .word {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .word .translation-tooltip {
+            display: none;
+            position: absolute;
+            bottom: 100%; /* Position above the word */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+            z-index: 1000;
+        }
+
+        .word.active .translation-tooltip {
+            display: block; /* Show tooltip when active */
+        }
     </style>
 </head>
 <body>
@@ -555,6 +620,21 @@
                     <button class="delete-button" onclick="deleteFlashcard(${item.id})" aria-label="Delete flashcard">🗑️</button>
                 `;
                 flashcardContainer.appendChild(card);
+            });
+
+            // Add click event listeners to show/hide translation
+            document.querySelectorAll('.word').forEach(word => {
+                word.addEventListener('click', function () {
+                    // Remove active class from all other words
+                    document.querySelectorAll('.word.active').forEach(activeWord => {
+                        if (activeWord !== word) {
+                            activeWord.classList.remove('active');
+                        }
+                    });
+
+                    // Toggle active class on the clicked word
+                    word.classList.toggle('active');
+                });
             });
         }
 
