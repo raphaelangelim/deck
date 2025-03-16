@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Flashcards App</title>
     <style>
-               /* Add all your CSS styles here */
-        /* ... (keep all your existing CSS styles) ... */
-        :root {
+              :root {
             --primary-color: #007AFF;
             --secondary-color: #005ecb;
             --background-color: #fafafa;
@@ -33,7 +31,6 @@
             overflow-x: hidden;
         }
 
-        /* Hamburger menu styling */
         .hamburger {
             font-size: 24px;
             cursor: pointer;
@@ -45,7 +42,6 @@
             z-index: 1000;
         }
 
-        /* Vertical menu styling */
         #verticalMenu {
             list-style-type: none;
             margin: 0;
@@ -82,7 +78,6 @@
             color: white;
         }
 
-        /* Main content styling */
         #content {
             margin-left: 0;
             padding: 20px;
@@ -95,7 +90,6 @@
             margin-left: 250px;
         }
 
-        /* View Buttons */
         .view-buttons {
             width: 100%;
             display: flex;
@@ -123,25 +117,31 @@
             background-color: var(--secondary-color);
         }
 
-        /* Flashcards Section */
         .flashcard-container {
             width: 100%;
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 0; /* Remove gap between cards */
             justify-content: flex-start;
         }
 
         .polaroid {
-            position: relative;
-            background: white;
-            padding: 10px;
-            box-shadow: var(--shadow);
-            text-align: center;
-            width: calc(33.33% - 14px); /* 3 cards per row with gap */
-            transition: all 0.3s ease;
-            margin-bottom: 20px;
-            box-sizing: border-box; /* Ensure padding is included in the width */
+            width: calc(33.33% - 2px); /* 3 cards per row with a 1px border on each side */
+            border-right: 1px solid black; /* Thin black line between cards */
+            border-bottom: 1px solid black; /* Thin black line between cards */
+            box-sizing: border-box; /* Ensure borders are included in the width */
+            margin: 0; /* Remove margin */
+            padding: 10px; /* Add padding inside the card */
+        }
+
+        /* Remove the right border for the last card in each row */
+        .polaroid:nth-child(3n) {
+            border-right: none;
+        }
+
+        /* Remove the bottom border for the last row */
+        .polaroid:nth-last-child(-n+3) {
+            border-bottom: none;
         }
 
         .polaroid img {
@@ -153,6 +153,27 @@
             font-size: 24px;
             font-weight: bold;
             margin-top: 10px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .word .translation-tooltip {
+            display: none;
+            position: absolute;
+            bottom: 100%; /* Position above the word */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+            z-index: 1000;
+        }
+
+        .word.active .translation-tooltip {
+            display: block; /* Show tooltip when active */
         }
 
         .audio-button {
@@ -173,26 +194,13 @@
             border: none;
             color: red;
             padding: 10px;
-            display: none; /* Hide by default */
-        }
-
-        /* Hide delete button in grid and deck views */
-        .grid-view .delete-button,
-        .deck-view .delete-button {
             display: none;
         }
 
-        /* Show delete button in list view */
         .list-view .delete-button {
             display: inline-block;
         }
 
-        /* Grid View */
-        .grid-view .polaroid {
-            width: calc(33.33% - 14px);
-        }
-
-        /* List View */
         .list-view .polaroid {
             width: 100%;
             display: flex;
@@ -211,7 +219,6 @@
             flex: 1;
         }
 
-        /* Deck View */
         .deck-view {
             display: none;
         }
@@ -258,7 +265,6 @@
             font-size: 16px;
         }
 
-        /* Floating Add Button */
         .add-button {
             position: fixed;
             bottom: 20px;
@@ -282,7 +288,6 @@
             background-color: var(--secondary-color);
         }
 
-        /* Popup Modal */
         .modal {
             display: none;
             position: fixed;
@@ -339,10 +344,9 @@
             color: var(--primary-color);
         }
 
-        /* Responsive Design for Mobile and Tablet */
         @media (max-width: 768px) {
             .polaroid {
-                width: calc(50% - 14px); /* 2 cards per row on tablets */
+                width: calc(33.33% - 2px); /* 3 cards per row on mobile */
             }
 
             .list-view .polaroid img {
@@ -357,7 +361,7 @@
 
         @media (max-width: 480px) {
             .polaroid {
-                width: 100%; /* 1 card per row on mobile */
+                width: calc(33.33% - 2px); /* 3 cards per row on small mobile screens */
             }
 
             .list-view .polaroid img {
@@ -368,96 +372,6 @@
             .list-view .word {
                 font-size: 16px;
             }
-        }
-        /* Tooltip styling */
-        .word {
-            position: relative;
-            cursor: pointer;
-        }
-
-        .word .translation-tooltip {
-            display: none;
-            position: absolute;
-            bottom: 100%; /* Position above the word */
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            white-space: nowrap;
-            z-index: 1000;
-        }
-
-        .word.active .translation-tooltip {
-            display: block; /* Show tooltip when active */
-        }
-
-
-        /* Ensure 3 cards per row with no space in between */
-        .flashcard-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0; /* Remove gap between cards */
-            justify-content: flex-start;
-        }
-
-        .polaroid {
-            width: calc(33.33% - 2px); /* 3 cards per row with a 1px border on each side */
-            border-right: 1px solid black; /* Thin black line between cards */
-            border-bottom: 1px solid black; /* Thin black line between cards */
-            box-sizing: border-box; /* Ensure borders are included in the width */
-            margin: 0; /* Remove margin */
-            padding: 10px; /* Add padding inside the card */
-        }
-
-        /* Remove the right border for the last card in each row */
-        .polaroid:nth-child(3n) {
-            border-right: none;
-        }
-
-        /* Remove the bottom border for the last row */
-        .polaroid:nth-last-child(-n+3) {
-            border-bottom: none;
-        }
-
-        /* Mobile Styles */
-        @media (max-width: 768px) {
-            .polaroid {
-                width: calc(33.33% - 2px); /* 3 cards per row on mobile */
-            }
-        }
-
-        @media (max-width: 480px) {
-            .polaroid {
-                width: calc(33.33% - 2px); /* 3 cards per row on small mobile screens */
-            }
-        }
-
-        /* Translation Tooltip */
-        .word {
-            position: relative;
-            cursor: pointer;
-        }
-
-        .word .translation-tooltip {
-            display: none;
-            position: absolute;
-            bottom: 100%; /* Position above the word */
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            white-space: nowrap;
-            z-index: 1000;
-        }
-
-        .word.active .translation-tooltip {
-            display: block; /* Show tooltip when active */
         }
     </style>
 </head>
@@ -521,6 +435,9 @@
         let db;
         const DB_NAME = "FlashcardsDB";
         const STORE_NAME = "flashcards";
+
+        // Global flashcards array
+        let flashcards = [];
 
         function openDB() {
             return new Promise((resolve, reject) => {
@@ -603,11 +520,11 @@
 
         async function loadFlashcards() {
             console.log("Loading flashcards"); // Debugging statement
-            const flashcards = await getAllFlashcards();
+            flashcards = await getAllFlashcards(); // Update the global flashcards array
             const flashcardContainer = document.getElementById("flashcards");
             flashcardContainer.innerHTML = "";
 
-            flashcards.forEach((item, index) => {
+            flashcards.reverse().forEach((item, index) => { // Reverse to show newest first
                 const card = document.createElement("div");
                 card.classList.add("polaroid");
                 card.innerHTML = `
@@ -693,6 +610,79 @@
             } else {
                 console.error("ResponsiveVoice library not loaded.");
             }
+        }
+
+        // Menu and View Functions
+        function toggleMenu() {
+            console.log("toggleMenu called"); // Debugging statement
+            const verticalMenu = document.getElementById("verticalMenu");
+            const content = document.getElementById("content");
+
+            verticalMenu.classList.toggle("active");
+            content.classList.toggle("shifted");
+        }
+
+        function switchView(view) {
+            console.log("switchView called:", view); // Debugging statement
+            const flashcardContainer = document.getElementById("flashcards");
+            const deckContainer = document.getElementById("deck-container");
+
+            // Reset all views
+            flashcardContainer.classList.remove("grid-view", "list-view", "deck-view");
+            deckContainer.style.display = "none";
+
+            // Apply the selected view
+            if (view === "grid") {
+                flashcardContainer.classList.add("grid-view");
+                flashcardContainer.style.display = "flex";
+            } else if (view === "list") {
+                flashcardContainer.classList.add("list-view");
+                flashcardContainer.style.display = "flex";
+            } else if (view === "deck") {
+                flashcardContainer.style.display = "none";
+                deckContainer.style.display = "block";
+                loadDeckView(); // Load the first card in the deck
+            }
+        }
+
+        let currentDeckIndex = 0;
+
+        function loadDeckView() {
+            console.log("loadDeckView called"); // Debugging statement
+            console.log("Flashcards:", flashcards); // Debugging statement
+            const deckImage = document.getElementById("deck-image");
+            const deckWord = document.getElementById("deck-word");
+
+            if (flashcards.length > 0) {
+                const currentCard = flashcards[currentDeckIndex];
+                deckImage.src = currentCard.img;
+                deckWord.textContent = currentCard.word;
+            } else {
+                deckImage.src = "https://placehold.co/150x150";
+                deckWord.textContent = "No flashcards available";
+            }
+        }
+
+        function prevCard() {
+            console.log("prevCard called"); // Debugging statement
+            if (currentDeckIndex > 0) {
+                currentDeckIndex--;
+                loadDeckView();
+            }
+        }
+
+        function nextCard() {
+            console.log("nextCard called"); // Debugging statement
+            if (currentDeckIndex < flashcards.length - 1) {
+                currentDeckIndex++;
+                loadDeckView();
+            }
+        }
+
+        function playDeckAudio() {
+            console.log("playDeckAudio called"); // Debugging statement
+            const currentCard = flashcards[currentDeckIndex];
+            playAudio(currentCard.word);
         }
 
         async function init() {
