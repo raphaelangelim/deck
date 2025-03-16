@@ -8,7 +8,7 @@
     <style>
         /* Add all your CSS styles here */
         /* ... (keep all your existing CSS styles) ... */
-       :root {
+               :root {
             --primary-color: #007AFF;
             --secondary-color: #005ecb;
             --background-color: #fafafa;
@@ -440,7 +440,7 @@
             <h3>Add New Flashcard</h3>
             <input type="text" id="new-word" placeholder="Enter word" />
             <input type="text" id="new-translation" placeholder="Enter translation" />
-            <input type="file" id="new-image" accept="image/*" capture="environment" />
+            <input type="file" id="new-image" accept="image/*" />
             <button onclick="addFlashcard()">Add Flashcard</button>
         </div>
     </div>
@@ -508,6 +508,16 @@
                 alert('Please fill in all fields and select an image.');
             }
         }
+
+        // Debug file input
+        document.getElementById('new-image').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                console.log('File selected:', file.name);
+            } else {
+                console.log('No file selected');
+            }
+        });
 
         // Function to load flashcards from local storage
         function loadFlashcardsFromStorage() {
