@@ -8,7 +8,7 @@
     <style>
         /* Add all your CSS styles here */
         /* ... (keep all your existing CSS styles) ... */
-               :root {
+        :root {
             --primary-color: #007AFF;
             --secondary-color: #005ecb;
             --background-color: #fafafa;
@@ -446,8 +446,11 @@
     </div>
 
     <!-- JavaScript -->
-    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=dLtRpvvZ"></script>
     <script>
+        // Initialize ResponsiveVoice with your API key
+        responsiveVoice.init("dLtRpvvZ");
+
         // Function to toggle the vertical menu
         function toggleMenu() {
             const verticalMenu = document.getElementById("verticalMenu");
@@ -470,6 +473,7 @@
         function closeModal() {
             const modal = document.getElementById("modal");
             modal.style.display = "none";
+            console.log('Modal closed'); // Log modal closure
         }
 
         // Function to add a new flashcard
@@ -479,8 +483,11 @@
             const imageFile = document.getElementById('new-image').files[0];
 
             if (word && translation && imageFile) {
+                console.log('File selected:', imageFile.name); // Log the file name
+
                 const reader = new FileReader();
                 reader.onload = function (e) {
+                    console.log('File read successfully:', e.target.result); // Log the file data URL
                     const newFlashcard = {
                         word: word,
                         translation: translation,
@@ -489,6 +496,7 @@
 
                     flashcards.push(newFlashcard);
                     localStorage.setItem('flashcards', JSON.stringify(flashcards));
+                    console.log('Flashcards saved to localStorage:', flashcards); // Log the flashcards array
                     loadFlashcards();
 
                     // Clear input fields
@@ -509,21 +517,12 @@
             }
         }
 
-        // Debug file input
-        document.getElementById('new-image').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                console.log('File selected:', file.name);
-            } else {
-                console.log('No file selected');
-            }
-        });
-
         // Function to load flashcards from local storage
         function loadFlashcardsFromStorage() {
             const storedFlashcards = localStorage.getItem('flashcards');
             if (storedFlashcards) {
                 flashcards = JSON.parse(storedFlashcards);
+                console.log('Flashcards loaded from localStorage:', flashcards); // Log the loaded flashcards
             }
         }
 
@@ -531,6 +530,7 @@
         function loadFlashcards() {
             let flashcardContainer = document.getElementById("flashcards");
             flashcardContainer.innerHTML = ""; // Clear the container
+            console.log('Loading flashcards:', flashcards); // Log the flashcards array
             flashcards.forEach((item, index) => {
                 let card = document.createElement("div");
                 card.classList.add("polaroid");
