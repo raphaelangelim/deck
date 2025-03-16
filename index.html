@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Flashcards App</title>
     <style>
-        :root {
+        /* Add all your CSS styles here */
+        /* ... (keep all your existing CSS styles) ... */
+       :root {
             --primary-color: #007AFF;
             --secondary-color: #005ecb;
             --background-color: #fafafa;
@@ -367,6 +369,30 @@
                 font-size: 16px;
             }
         }
+        /* Tooltip styling */
+        .word {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .word .translation-tooltip {
+            display: none;
+            position: absolute;
+            bottom: 100%; /* Position above the word */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+            z-index: 1000;
+        }
+
+        .word.active .translation-tooltip {
+            display: block; /* Show tooltip when active */
+        }
     </style>
 </head>
 <body>
@@ -493,7 +519,10 @@
                 card.classList.add("polaroid");
                 card.innerHTML = `
                     <img src="${item.img}" alt="${item.word}" onerror="this.src='https://via.placeholder.com/150'">
-                    <div class="word translatable" data-translation="${item.translation}">${item.word}</div>
+                    <div class="word" data-translation="${item.translation}">
+                        ${item.word}
+                        <span class="translation-tooltip">${item.translation}</span>
+                    </div>
                     <button class="audio-button" onclick="playAudio('${item.word}')" aria-label="Play audio for ${item.word}">🔊</button>
                     <button class="delete-button" onclick="deleteFlashcard(${index})" aria-label="Delete flashcard">🗑️</button>
                 `;
@@ -559,7 +588,7 @@
             if (flashcards.length > 0) {
                 const currentCard = flashcards[currentDeckIndex];
                 deckImage.src = currentCard.img;
-                deckWord.innerHTML = `<span class="translatable" data-translation="${currentCard.translation}">${currentCard.word}</span>`;
+                deckWord.innerHTML = `<span class="word" data-translation="${currentCard.translation}">${currentCard.word}</span>`;
             } else {
                 deckImage.src = "https://via.placeholder.com/150";
                 deckWord.textContent = "No flashcards available";
@@ -590,17 +619,20 @@
 
         // Function to handle translation tooltip
         document.addEventListener('click', function(event) {
-            if (event.target.classList.contains('translatable')) {
-                event.target.classList.toggle('active');
-            }
-        });
+            if (event.target.classList.contains('word')) {
+                // Remove active class from all other words
+                document.querySelectorAll('.word.active').forEach(word => {
+                    if (word !== event.target) {
+                        word.classList.remove('active');
+                    }
+                });
 
-        // Function to close tooltip when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!event.target.classList.contains('translatable')) {
-                const translatables = document.querySelectorAll('.translatable');
-                translatables.forEach(translatable => {
-                    translatable.classList.remove('active');
+                // Toggle active class on the clicked word
+                event.target.classList.toggle('active');
+            } else {
+                // Hide tooltips when clicking outside
+                document.querySelectorAll('.word.active').forEach(word => {
+                    word.classList.remove('active');
                 });
             }
         });
