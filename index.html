@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Flashcards App</title>
     <style>
-        /* Add all your CSS styles here */
+                /* Add all your CSS styles here */
         /* ... (keep all your existing CSS styles) ... */
         :root {
             --primary-color: #007AFF;
@@ -393,6 +393,7 @@
         .word.active .translation-tooltip {
             display: block; /* Show tooltip when active */
         }
+
     </style>
 </head>
 <body>
@@ -420,7 +421,7 @@
 
         <!-- Deck View (Instagram Style) -->
         <div id="deck-container" class="deck-container">
-            <img id="deck-image" src="https://via.placeholder.com/150" alt="Deck Image">
+            <img id="deck-image" src="https://placehold.co/150x150" alt="Deck Image">
             <div id="deck-word" class="deck-word"></div>
             <button class="audio-button" onclick="playDeckAudio()" aria-label="Play audio">🔊</button>
             <div class="deck-buttons">
@@ -448,123 +449,165 @@
     <!-- JavaScript -->
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=dLtRpvvZ"></script>
     <script>
-        // Initialize ResponsiveVoice with your API key
+        // Initialize ResponsiveVoice
         responsiveVoice.init("dLtRpvvZ");
 
-        // Function to toggle the vertical menu
-        function toggleMenu() {
-            const verticalMenu = document.getElementById("verticalMenu");
-            const content = document.getElementById("content");
+        // IndexedDB setup
+        let db;
+        const DB_NAME = "FlashcardsDB";
+        const STORE_NAME = "flashcards";
 
-            verticalMenu.classList.toggle("active");
-            content.classList.toggle("shifted");
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, 1);
+
+                request.onupgradeneeded = function (event) {
+                    console.log("Database upgrade needed"); // Debugging statement
+                    db = event.target.result;
+                    if (!db.objectStoreNames.contains(STORE_NAME)) {
+                        db.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
+                    }
+                };
+
+                request.onsuccess = function (event) {
+                    console.log("Database opened successfully"); // Debugging statement
+                    db = event.target.result;
+                    resolve(db);
+                };
+
+                request.onerror = function (event) {
+                    console.error("Error opening database:", event.target.errorCode); // Debugging statement
+                    reject("Error opening database: " + event.target.errorCode);
+                };
+            });
         }
 
-        let currentDeckIndex = 0;
-        let flashcards = [];
+        function addFlashcardToDB(flashcard) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(STORE_NAME, "readwrite");
+                const store = transaction.objectStore(STORE_NAME);
+                const request = store.add(flashcard);
 
-        // Function to open the modal
+                request.onsuccess = function () {
+                    console.log("Flashcard added to DB"); // Debugging statement
+                    resolve(request.result);
+                };
+
+                request.onerror = function (event) {
+                    console.error("Error adding flashcard:", event.target.errorCode); // Debugging statement
+                    reject("Error adding flashcard: " + event.target.errorCode);
+                };
+            });
+        }
+
+        function getAllFlashcards() {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(STORE_NAME, "readonly");
+                const store = transaction.objectStore(STORE_NAME);
+                const request = store.getAll();
+
+                request.onsuccess = function () {
+                    console.log("Flashcards retrieved from DB"); // Debugging statement
+                    resolve(request.result);
+                };
+
+                request.onerror = function (event) {
+                    console.error("Error retrieving flashcards:", event.target.errorCode); // Debugging statement
+                    reject("Error retrieving flashcards: " + event.target.errorCode);
+                };
+            });
+        }
+
+        function deleteFlashcardFromDB(id) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(STORE_NAME, "readwrite");
+                const store = transaction.objectStore(STORE_NAME);
+                const request = store.delete(id);
+
+                request.onsuccess = function () {
+                    console.log("Flashcard deleted from DB"); // Debugging statement
+                    resolve();
+                };
+
+                request.onerror = function (event) {
+                    console.error("Error deleting flashcard:", event.target.errorCode); // Debugging statement
+                    reject("Error deleting flashcard: " + event.target.errorCode);
+                };
+            });
+        }
+
+        async function loadFlashcards() {
+            console.log("Loading flashcards"); // Debugging statement
+            const flashcards = await getAllFlashcards();
+            const flashcardContainer = document.getElementById("flashcards");
+            flashcardContainer.innerHTML = "";
+
+            flashcards.forEach((item, index) => {
+                const card = document.createElement("div");
+                card.classList.add("polaroid");
+                card.innerHTML = `
+                    <img src="${item.img}" alt="${item.word}" onerror="this.src='https://placehold.co/150x150'">
+                    <div class="word" data-translation="${item.translation}">
+                        ${item.word}
+                        <span class="translation-tooltip">${item.translation}</span>
+                    </div>
+                    <button class="audio-button" onclick="playAudio('${item.word}')" aria-label="Play audio for ${item.word}">🔊</button>
+                    <button class="delete-button" onclick="deleteFlashcard(${item.id})" aria-label="Delete flashcard">🗑️</button>
+                `;
+                flashcardContainer.appendChild(card);
+            });
+        }
+
         function openModal() {
+            console.log("openModal called"); // Debugging statement
             const modal = document.getElementById("modal");
             modal.style.display = "flex";
         }
 
-        // Function to close the modal
         function closeModal() {
+            console.log("closeModal called"); // Debugging statement
             const modal = document.getElementById("modal");
             modal.style.display = "none";
-            console.log('Modal closed'); // Log modal closure
         }
 
-        // Function to add a new flashcard
-        function addFlashcard() {
+        async function addFlashcard() {
+            console.log("addFlashcard called"); // Debugging statement
             const word = document.getElementById('new-word').value;
             const translation = document.getElementById('new-translation').value;
             const imageFile = document.getElementById('new-image').files[0];
 
             if (word && translation && imageFile) {
-                console.log('File selected:', imageFile.name); // Log the file name
-
                 const reader = new FileReader();
-                reader.onload = function (e) {
-                    console.log('File read successfully:', e.target.result); // Log the file data URL
+                reader.onload = async function (e) {
                     const newFlashcard = {
                         word: word,
                         translation: translation,
                         img: e.target.result
                     };
 
-                    flashcards.push(newFlashcard);
-                    localStorage.setItem('flashcards', JSON.stringify(flashcards));
-                    console.log('Flashcards saved to localStorage:', flashcards); // Log the flashcards array
-                    loadFlashcards();
+                    await addFlashcardToDB(newFlashcard);
+                    await loadFlashcards();
 
                     // Clear input fields
                     document.getElementById('new-word').value = '';
                     document.getElementById('new-translation').value = '';
-                    document.getElementById('new-image').value = ''; // Reset file input
+                    document.getElementById('new-image').value = '';
                     closeModal();
                 };
-
-                reader.onerror = function (error) {
-                    console.error('Error reading file:', error);
-                    alert('Error reading the image file. Please try again.');
-                };
-
                 reader.readAsDataURL(imageFile);
             } else {
                 alert('Please fill in all fields and select an image.');
             }
         }
 
-        // Function to load flashcards from local storage
-        function loadFlashcardsFromStorage() {
-            const storedFlashcards = localStorage.getItem('flashcards');
-            if (storedFlashcards) {
-                flashcards = JSON.parse(storedFlashcards);
-                console.log('Flashcards loaded from localStorage:', flashcards); // Log the loaded flashcards
-            }
+        async function deleteFlashcard(id) {
+            console.log("deleteFlashcard called"); // Debugging statement
+            await deleteFlashcardFromDB(id);
+            await loadFlashcards();
         }
 
-        // Load the flashcards into the flashcard container
-        function loadFlashcards() {
-            let flashcardContainer = document.getElementById("flashcards");
-            flashcardContainer.innerHTML = ""; // Clear the container
-            console.log('Loading flashcards:', flashcards); // Log the flashcards array
-            flashcards.forEach((item, index) => {
-                let card = document.createElement("div");
-                card.classList.add("polaroid");
-                card.innerHTML = `
-                    <img src="${item.img}" alt="${item.word}" onerror="this.src='https://via.placeholder.com/150'">
-                    <div class="word" data-translation="${item.translation}">
-                        ${item.word}
-                        <span class="translation-tooltip">${item.translation}</span>
-                    </div>
-                    <button class="audio-button" onclick="playAudio('${item.word}')" aria-label="Play audio for ${item.word}">🔊</button>
-                    <button class="delete-button" onclick="deleteFlashcard(${index})" aria-label="Delete flashcard">🗑️</button>
-                `;
-                flashcardContainer.appendChild(card);
-            });
-
-            // Hide delete buttons in grid and deck views
-            const deleteButtons = document.querySelectorAll('.delete-button');
-            const currentView = document.getElementById("flashcards").classList;
-            if (currentView.contains('grid-view') || currentView.contains('deck-view')) {
-                deleteButtons.forEach(button => button.style.display = 'none');
-            } else if (currentView.contains('list-view')) {
-                deleteButtons.forEach(button => button.style.display = 'inline-block');
-            }
-        }
-
-        // Function to delete a flashcard
-        function deleteFlashcard(index) {
-            flashcards.splice(index, 1);
-            localStorage.setItem('flashcards', JSON.stringify(flashcards));
-            loadFlashcards();
-        }
-
-        // Play audio for a given word
         function playAudio(word) {
+            console.log("playAudio called"); // Debugging statement
             if (typeof responsiveVoice !== "undefined") {
                 responsiveVoice.speak(word, "French Female", { rate: 0.7, pitch: 1.2 });
             } else {
@@ -572,94 +615,14 @@
             }
         }
 
-        // Function to switch between grid, list, and deck views
-        function switchView(view) {
-            const flashcardContainer = document.getElementById("flashcards");
-            const deckContainer = document.getElementById("deck-container");
-
-            // Reset all views
-            flashcardContainer.classList.remove("grid-view", "list-view", "deck-view");
-            deckContainer.style.display = "none";
-
-            // Apply the selected view
-            if (view === "grid") {
-                flashcardContainer.classList.add("grid-view");
-                flashcardContainer.style.display = "flex";
-            } else if (view === "list") {
-                flashcardContainer.classList.add("list-view");
-                flashcardContainer.style.display = "flex";
-            } else if (view === "deck") {
-                flashcardContainer.style.display = "none";
-                deckContainer.style.display = "block";
-                loadDeckView(); // Load the first card in the deck
-            }
-
-            // Update delete button visibility
-            loadFlashcards();
+        async function init() {
+            console.log("Initializing app"); // Debugging statement
+            await openDB();
+            await loadFlashcards();
         }
 
-        // Function to load the deck view
-        function loadDeckView() {
-            const deckImage = document.getElementById("deck-image");
-            const deckWord = document.getElementById("deck-word");
-            if (flashcards.length > 0) {
-                const currentCard = flashcards[currentDeckIndex];
-                deckImage.src = currentCard.img;
-                deckWord.innerHTML = `<span class="word" data-translation="${currentCard.translation}">${currentCard.word}</span>`;
-            } else {
-                deckImage.src = "https://via.placeholder.com/150";
-                deckWord.textContent = "No flashcards available";
-            }
-        }
-
-        // Function to navigate to the previous card in the deck
-        function prevCard() {
-            if (currentDeckIndex > 0) {
-                currentDeckIndex--;
-                loadDeckView();
-            }
-        }
-
-        // Function to navigate to the next card in the deck
-        function nextCard() {
-            if (currentDeckIndex < flashcards.length - 1) {
-                currentDeckIndex++;
-                loadDeckView();
-            }
-        }
-
-        // Function to play audio for the current deck card
-        function playDeckAudio() {
-            const currentCard = flashcards[currentDeckIndex];
-            playAudio(currentCard.word);
-        }
-
-        // Function to handle translation tooltip
-        document.addEventListener('click', function(event) {
-            if (event.target.classList.contains('word')) {
-                // Remove active class from all other words
-                document.querySelectorAll('.word.active').forEach(word => {
-                    if (word !== event.target) {
-                        word.classList.remove('active');
-                    }
-                });
-
-                // Toggle active class on the clicked word
-                event.target.classList.toggle('active');
-            } else {
-                // Hide tooltips when clicking outside
-                document.querySelectorAll('.word.active').forEach(word => {
-                    word.classList.remove('active');
-                });
-            }
-        });
-
-        // Load the flashcards when the page loads
-        window.onload = () => {
-            loadFlashcardsFromStorage();
-            loadFlashcards();
-            switchView('grid'); // Default to grid view
-        };
+        // Run the app
+        init();
     </script>
 </body>
 </html>
