@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Flashcards App</title>
     <style>
         :root {
@@ -103,7 +103,7 @@
         }
 
         .view-buttons button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
             cursor: pointer;
             border-radius: 5px;
@@ -155,20 +155,22 @@
 
         .audio-button {
             margin-top: 10px;
-            font-size: 20px;
+            font-size: 24px;
             cursor: pointer;
             background: none;
             border: none;
             color: var(--primary-color);
+            padding: 10px;
         }
 
         .delete-button {
             margin-top: 10px;
-            font-size: 20px;
+            font-size: 24px;
             cursor: pointer;
             background: none;
             border: none;
             color: red;
+            padding: 10px;
             display: none; /* Hide by default */
         }
 
@@ -248,7 +250,7 @@
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             cursor: pointer;
             border-radius: 5px;
             font-size: 16px;
@@ -259,13 +261,13 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             background-color: var(--primary-color);
             color: white;
             border: none;
             border-radius: 50%;
-            font-size: 24px;
+            font-size: 30px;
             cursor: pointer;
             box-shadow: var(--shadow);
             display: flex;
@@ -312,7 +314,7 @@
         }
 
         .modal-content button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             background-color: var(--primary-color);
             color: white;
             border: none;
@@ -333,6 +335,37 @@
             font-size: 24px;
             cursor: pointer;
             color: var(--primary-color);
+        }
+
+        /* Responsive Design for Mobile and Tablet */
+        @media (max-width: 768px) {
+            .polaroid {
+                width: calc(50% - 14px); /* 2 cards per row on tablets */
+            }
+
+            .list-view .polaroid img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .list-view .word {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .polaroid {
+                width: 100%; /* 1 card per row on mobile */
+            }
+
+            .list-view .polaroid img {
+                width: 60px;
+                height: 60px;
+            }
+
+            .list-view .word {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
@@ -428,16 +461,10 @@
                         img: e.target.result
                     };
 
-                    // Add the new flashcard to the flashcards array
                     flashcards.push(newFlashcard);
-
-                    // Save the updated flashcards array to local storage
                     localStorage.setItem('flashcards', JSON.stringify(flashcards));
-
-                    // Reload the flashcards display
                     loadFlashcards();
 
-                    // Clear the input fields and close the modal
                     document.getElementById('new-word').value = '';
                     document.getElementById('new-translation').value = '';
                     document.getElementById('new-image').value = '';
